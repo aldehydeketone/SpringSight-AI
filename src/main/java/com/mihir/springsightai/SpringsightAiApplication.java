@@ -1,4 +1,4 @@
-package com.mihir.springsight;
+package com.mihir.springsightai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
