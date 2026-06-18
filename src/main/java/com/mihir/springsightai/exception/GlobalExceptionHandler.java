@@ -84,6 +84,39 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(ReportNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleReportNotFound(ReportNotFoundException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .success(false)
+                .error("NOT_FOUND")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedReportAccessException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedReportAccess(UnauthorizedReportAccessException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .success(false)
+                .error("FORBIDDEN")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UnauthorizedLogFileAccessException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedLogFileAccess(UnauthorizedLogFileAccessException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .success(false)
+                .error("FORBIDDEN")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
@@ -97,6 +130,17 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PdfGenerationException.class)
+    public ResponseEntity<ErrorResponse> handlePdfGeneration(PdfGenerationException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .success(false)
+                .error("INTERNAL_SERVER_ERROR")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)

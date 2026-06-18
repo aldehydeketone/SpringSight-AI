@@ -1,7 +1,9 @@
 package com.mihir.springsightai.log.service;
 
+import com.mihir.springsightai.auth.entity.User;
 import com.mihir.springsightai.exception.LogFileNotFoundException;
 import com.mihir.springsightai.exception.LogParseException;
+import com.mihir.springsightai.exception.UnauthorizedLogFileAccessException;
 import com.mihir.springsightai.log.dto.ParseResponse;
 import com.mihir.springsightai.log.entity.LogFile;
 import com.mihir.springsightai.log.entity.ParsedLog;
@@ -10,6 +12,8 @@ import com.mihir.springsightai.log.repository.ParsedLogRepository;
 import com.mihir.springsightai.log.util.LogPatternUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +88,8 @@ public class LogParserService {
 
         LogFile logFile = logFileRepository.findById(logFileId)
                 .orElseThrow(() -> new LogFileNotFoundException(logFileId));
+
+        validateOwnership(logFile);
 
         // ------------------------------------------------------------------ 2
         Path filePath = Paths.get(logFile.getFilePath());
@@ -216,5 +222,21 @@ public class LogParserService {
                 .logLevel(level)
                 .message(message)
                 .build();
+    }
+
+    private void validateOwnership(LogFile logFile) {
+        Long authenticatedUserId = getAuthenticatedUserId();
+        if (!logFile.getUploadedByUserId().equals(authenticatedUserId)) {
+            throw new UnauthorizedLogFileAccessException(logFile.getId());
+        }
+    }
+
+    private Long getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof User user)) {
+            throw new IllegalStateException("Authenticated user is unavailable");
+        }
+        return user.getId();
     }
 }

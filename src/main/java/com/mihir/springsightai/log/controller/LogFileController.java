@@ -3,6 +3,9 @@ package com.mihir.springsightai.log.controller;
 import com.mihir.springsightai.common.ApiResponse;
 import com.mihir.springsightai.log.dto.LogFileResponse;
 import com.mihir.springsightai.log.service.LogFileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/logs")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Log Upload", description = "Secure log upload APIs")
 public class LogFileController {
 
     private final LogFileService logFileService;
@@ -35,6 +40,7 @@ public class LogFileController {
      * @return ApiResponse wrapping the LogFileResponse DTO
      */
     @PostMapping("/upload")
+    @Operation(summary = "Upload a log file")
     public ResponseEntity<ApiResponse<LogFileResponse>> uploadLogFile(
             @RequestParam("file") MultipartFile file) throws IOException {
 

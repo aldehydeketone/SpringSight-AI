@@ -2,6 +2,9 @@ package com.mihir.springsightai.log.controller;
 
 import com.mihir.springsightai.log.dto.ParseResponse;
 import com.mihir.springsightai.log.service.LogParserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/logs")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Log Parsing", description = "Parse uploaded logs into structured entries")
 public class LogParseController {
 
     private final LogParserService logParserService;
@@ -40,6 +45,7 @@ public class LogParseController {
      * @return {@link ParseResponse} containing parse statistics wrapped in 200 OK
      */
     @PostMapping("/{id}/parse")
+    @Operation(summary = "Parse an uploaded log file")
     public ResponseEntity<ParseResponse> parseLogFile(@PathVariable Long id) {
         log.info("[LogParseController] Parse request received for logFileId={}", id);
         ParseResponse response = logParserService.parseLogFile(id);

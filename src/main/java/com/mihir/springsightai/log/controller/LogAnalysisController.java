@@ -2,6 +2,9 @@ package com.mihir.springsightai.log.controller;
 
 import com.mihir.springsightai.log.dto.AnalysisResponse;
 import com.mihir.springsightai.log.service.LogAnalysisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/logs")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Log Analysis", description = "Analyze parsed log files")
 public class LogAnalysisController {
 
     private final LogAnalysisService logAnalysisService;
@@ -30,6 +35,7 @@ public class LogAnalysisController {
      * @return 200 OK with the AnalysisResponse DTO payload
      */
     @GetMapping("/{id}/analysis")
+    @Operation(summary = "Analyze a parsed log file")
     public ResponseEntity<AnalysisResponse> getLogAnalysis(@PathVariable Long id) {
         log.info("[LogAnalysisController] Request received for log analysis of fileId={}", id);
         AnalysisResponse response = logAnalysisService.analyzeLogs(id);

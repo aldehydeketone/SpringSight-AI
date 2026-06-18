@@ -2,6 +2,9 @@ package com.mihir.springsightai.ai.controller;
 
 import com.mihir.springsightai.ai.service.GeminiService;
 import com.mihir.springsightai.common.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,8 @@ import java.util.Map;
 @RequestMapping("/api/ai")
 @RequiredArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "AI Diagnostics", description = "Gemini connectivity test APIs")
 public class AiTestController {
 
     private final GeminiService geminiService;
@@ -28,6 +33,7 @@ public class AiTestController {
      * Sends "Say hello in one sentence." and returns the response.
      */
     @GetMapping("/test")
+    @Operation(summary = "Test Gemini API connectivity")
     public ResponseEntity<ApiResponse<Map<String, String>>> testGemini() {
         log.info("[AiTestController] Gemini test endpoint called");
 
