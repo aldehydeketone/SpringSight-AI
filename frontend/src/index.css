@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #060913;
+    color: #f1f5f9;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom scrollbar utility */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Custom Scanline Animation */
+@keyframes scanline-anim {
+  0% {
+    transform: translateY(-5vh);
+  }
+  100% {
+    transform: translateY(105vh);
+  }
+}
+
+.animate-scanline {
+  animation: scanline-anim 6s linear infinite;
+}
+
+/* Eye Icon Ripple Animation */
+@keyframes eye-ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.animate-eye-ripple {
+  animation: eye-ripple 3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Staggered load list items (Badge Row) */
+@keyframes badge-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-badge-in-1 {
+  animation: badge-slide-in 0.5s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.animate-badge-in-2 {
+  animation: badge-slide-in 0.5s ease-out forwards;
+  animation-delay: 0.45s;
+  opacity: 0;
+}
+
+.animate-badge-in-3 {
+  animation: badge-slide-in 0.5s ease-out forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+}
+

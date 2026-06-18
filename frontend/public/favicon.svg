@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <rect width="36" height="36" rx="9" fill="#060913"/>
+  <rect x="0.5" y="0.5" width="35" height="35" rx="8.5" fill="rgba(0, 200, 255, 0.08)" stroke="rgba(0, 200, 255, 0.2)" stroke-width="1"/>
+  <!-- Outer Eye Shape -->
+  <path d="M 4 18 C 9 9, 27 9, 32 18 C 27 27, 9 27, 4 18 Z" stroke="#00C8FF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Spiral Inner Path -->
+  <path d="M 18 11.5 C 14.41 11.5, 11.5 14.41, 11.5 18 C 11.5 21.59, 14.41 24.5, 18 24.5 C 21.59, 24.5, 24.5 21.59, 24.5 18 C 24.5 15.0, 22.0 13.0, 19.5 13.0 C 17.5 13.0, 15.5 14.5, 15.5 17.0 C 15.5 19.0, 17.0 20.5, 19.0 20.5" stroke="#00C8FF" stroke-width="1.75" stroke-linecap="round" fill="none"/>
+  <!-- Center Pupil Dot -->
+  <circle cx="19" cy="17.5" r="1.5" fill="#00C8FF"/>
+</svg>

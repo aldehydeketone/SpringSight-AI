@@ -2,48 +2,52 @@ package com.mihir.springsightai.log.util;
 
 import java.util.regex.Pattern;
 
-/**
- * Utility class providing the compiled regex {@link Pattern} used to parse
- * standard application log lines of the form:
- * <pre>
- *   2026-06-18 10:15:23 INFO User logged in
- * </pre>
- *
- * <p>Capture groups:
- * <ol>
- *   <li>Timestamp  — {@code yyyy-MM-dd HH:mm:ss}</li>
- *   <li>Log Level  — one of INFO, WARN, ERROR, DEBUG (case-insensitive)</li>
- *   <li>Message    — everything that follows on the same line</li>
- * </ol>
- *
- * <p>Lines that do not match (stack traces, blank lines, custom formats) are
- * counted as "ignored" and skipped gracefully by the parser.
- */
+/** Compiled patterns shared by the log parser. */
 public final class LogPatternUtil {
 
     /**
-     * Regex that matches a standard log line and extracts three groups:
-     * <ul>
-     *   <li>Group 1 – timestamp    : {@code \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}}</li>
-     *   <li>Group 2 – log level    : {@code INFO|WARN|ERROR|DEBUG} (case-insensitive)</li>
-     *   <li>Group 3 – message      : {@code .+} (rest of line, trimmed)</li>
-     * </ul>
+     * Date/time accepted by the parser. It supports the traditional logging
+     * separator, ISO-8601's {@code T}, optional fractional seconds and an
+     * optional UTC/offset suffix.
      */
+    public static final String TIMESTAMP_PATTERN =
+            "\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:[.,]\\d{1,9})?(?:Z|[+-]\\d{2}:?\\d{2})?";
+
+    /** Standard application log: timestamp, level and message. */
     public static final Pattern LOG_PATTERN = Pattern.compile(
-            "^(\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2})\\s+(INFO|WARN|ERROR|DEBUG|UNKNOWN)\\s+(.+)$",
+            "^(" + TIMESTAMP_PATTERN + ")\\s+(TRACE|DEBUG|INFO|WARN|ERROR|FATAL|UNKNOWN)\\s+(.+)$",
             Pattern.CASE_INSENSITIVE
     );
 
     /**
-     * Fallback pattern used when a line starts with a valid timestamp but has
-     * an unrecognised log level — lets the parser still capture the message
-     * and tag the level as {@code UNKNOWN} rather than ignoring the line.
+     * Default Spring Boot console format. Group 3 deliberately contains only
+     * the application message; PID, thread and logger are format metadata.
      */
-    public static final Pattern UNKNOWN_LEVEL_PATTERN = Pattern.compile(
-            "^(\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2})\\s+(\\S+)\\s+(.+)$"
+    public static final Pattern SPRING_BOOT_LOG_PATTERN = Pattern.compile(
+            "^(" + TIMESTAMP_PATTERN + ")\\s+(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)\\s+\\d+\\s+---\\s+\\[[^]]+]\\s+.+?\\s*:\\s*(.*)$",
+            Pattern.CASE_INSENSITIVE
     );
 
-    /** Prevent instantiation — this is a pure utility class. */
+    /** Timestamped line with an application-specific, unknown level token. */
+    public static final Pattern UNKNOWN_LEVEL_PATTERN = Pattern.compile(
+            "^(" + TIMESTAMP_PATTERN + ")\\s+(\\S+)\\s+(.+)$",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    /** Lines that belong to the exception emitted by the preceding log entry. */
+    public static final Pattern EXCEPTION_CONTINUATION_PATTERN = Pattern.compile(
+            "^\\s*(?:" +
+                    "at\\s+.+|" +
+                    "Caused by:\\s*.+|" +
+                    "Suppressed:\\s*.+|" +
+                    "\\.\\.\\.\\s+\\d+\\s+more|" +
+                    "(?:[\\w$]+\\.)+[\\w$]*(?:Exception|Error)(?::.*)?|" +
+                    "SQL(?:State| Error)\\s*:.*|" +
+                    "Hibernate\\s*:.*" +
+                    ")\\s*$",
+            Pattern.CASE_INSENSITIVE
+    );
+
     private LogPatternUtil() {
         throw new UnsupportedOperationException("LogPatternUtil is a utility class");
     }

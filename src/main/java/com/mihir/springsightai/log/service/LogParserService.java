@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -53,11 +54,11 @@ public class LogParserService {
     private final ParsedLogRepository parsedLogRepository;
 
     /** Recognised log level tokens. Lines with other tokens get level UNKNOWN. */
-    private static final Set<String> KNOWN_LEVELS = Set.of("INFO", "WARN", "ERROR", "DEBUG");
+    private static final Set<String> KNOWN_LEVELS =
+            Set.of("TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL");
 
     /** Formatter matching the timestamp captured by {@link LogPatternUtil#LOG_PATTERN}. */
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter ISO_LOCAL_TIMESTAMP = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     /**
      * Parses the log file identified by {@code logFileId}.
@@ -119,6 +120,7 @@ public class LogParserService {
         // ------------------------------------------------------------------ 4  parse
         List<ParsedLog> batch = new ArrayList<>();
 
+        ParsedLog currentEntry = null;
         for (String rawLine : lines) {
             String line = rawLine.trim();
 
@@ -132,7 +134,10 @@ public class LogParserService {
 
             if (entry != null) {
                 batch.add(entry);
+                currentEntry = entry;
                 parsedEntries++;
+            } else if (currentEntry != null && isExceptionContinuation(rawLine)) {
+                currentEntry.setMessage(currentEntry.getMessage() + "\n" + line);
             } else {
                 ignoredLines++;
             }
@@ -181,7 +186,14 @@ public class LogParserService {
      */
     private ParsedLog tryParseLine(String line, Long logFileId) {
 
-        // --- primary pattern (level must be INFO / WARN / ERROR / DEBUG / UNKNOWN)
+        // Spring Boot has extra PID/thread/logger fields between level and message.
+        Matcher springBoot = LogPatternUtil.SPRING_BOOT_LOG_PATTERN.matcher(line);
+        if (springBoot.matches()) {
+            return buildEntry(logFileId, springBoot.group(1),
+                    springBoot.group(2).toUpperCase(), springBoot.group(3).trim());
+        }
+
+        // --- primary pattern
         Matcher primary = LogPatternUtil.LOG_PATTERN.matcher(line);
         if (primary.matches()) {
             String rawLevel = primary.group(2).toUpperCase();
@@ -211,7 +223,13 @@ public class LogParserService {
     private ParsedLog buildEntry(Long logFileId, String rawTimestamp, String level, String message) {
         LocalDateTime timestamp = null;
         try {
-            timestamp = LocalDateTime.parse(rawTimestamp, TIMESTAMP_FORMATTER);
+            String isoTimestamp = rawTimestamp.replace(' ', 'T').replace(',', '.');
+            if (isoTimestamp.endsWith("Z") || hasOffset(isoTimestamp)) {
+                timestamp = OffsetDateTime.parse(isoTimestamp, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                        .toLocalDateTime();
+            } else {
+                timestamp = LocalDateTime.parse(isoTimestamp, ISO_LOCAL_TIMESTAMP);
+            }
         } catch (DateTimeParseException ex) {
             log.warn("[LogParserService] Could not parse timestamp '{}', storing null", rawTimestamp);
         }
@@ -222,6 +240,15 @@ public class LogParserService {
                 .logLevel(level)
                 .message(message)
                 .build();
+    }
+
+    private boolean isExceptionContinuation(String rawLine) {
+        return LogPatternUtil.EXCEPTION_CONTINUATION_PATTERN.matcher(rawLine).matches();
+    }
+
+    private boolean hasOffset(String timestamp) {
+        int timeSeparator = timestamp.indexOf('T');
+        return timestamp.indexOf('+', timeSeparator) >= 0 || timestamp.indexOf('-', timeSeparator) >= 0;
     }
 
     private void validateOwnership(LogFile logFile) {
