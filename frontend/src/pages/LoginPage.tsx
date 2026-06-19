@@ -24,34 +24,16 @@ export const LoginPage: React.FC = () => {
 
     try {
       if (isLogin) {
-        try {
-          const response = await AuthService.login({ email, password });
-          login(response.token, response.user);
-        } catch {
-          login('mock-jwt-token-sandbox', {
-            id: 100,
-            name: 'SaaS Recruiter',
-            email,
-            createdAt: new Date().toISOString(),
-          });
-        }
+        const response = await AuthService.login({ email, password });
+        login(response.token, response.user);
       } else {
         if (!name.trim()) {
           setError('Name is required');
           setLoading(false);
           return;
         }
-        try {
-          const response = await AuthService.register({ name, email, password });
-          login(response.token, response.user);
-        } catch {
-          login('mock-jwt-token-sandbox', {
-            id: 100,
-            name,
-            email,
-            createdAt: new Date().toISOString(),
-          });
-        }
+        const response = await AuthService.register({ name, email, password });
+        login(response.token, response.user);
       }
 
       setIsSuccess(true);

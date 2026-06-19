@@ -22,8 +22,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('user');
 
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      const isJwtShapedToken = storedToken.split('.').length === 3;
+
+      if (isJwtShapedToken) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
     setIsLoading(false);
   }, []);
