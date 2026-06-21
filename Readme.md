@@ -26,7 +26,7 @@ Developers often spend hours investigating:
 
 SpringSight AI automates this process through rule-based classification and AI-powered analysis.
 
----
+----
 
 ## ✨ Key Features
 
