@@ -34,4 +34,11 @@ public class AiAnalysisRequest {
 
     private List<String> topErrors;
     private List<String> sampleErrorLogs;
+
+    /**
+     * Optional. When present, the backend will enrich the AI prompt
+     * with detailed ParsedLog context fetched from the database.
+     * Existing callers that omit this field continue to work as before.
+     */
+    private Long logFileId;
 }

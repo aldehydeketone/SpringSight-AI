@@ -33,3 +33,18 @@ build/
 .vscode/
 
 uploads/
+
+# AI tool folders
+.gemini/
+.runtime-fixtures/
+
+# Node dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.*

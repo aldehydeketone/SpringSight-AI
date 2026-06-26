@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Monitor,
+  Brain,
   Upload,
   FileText,
   Settings,
@@ -9,24 +9,31 @@ import {
   Menu,
   X,
   Search,
-  Bot
+  Bot,
+  Bell,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../lib/auth';
 import { CommandSearch } from '../components/ui/command-search';
 import { SpringSightLogo } from '../components/ui/springsight-logo';
+import { ProgressBar } from '../components/ui/atoms/progress-bar';
 
+// ── Nav items ──────────────────────────────────────────────────────────────
+
+const menuItems = [
+  { name: 'AI Log Analysis',   path: '/dashboard', icon: Brain },
+  { name: 'Upload Logs',       path: '/upload',    icon: Upload },
+  { name: 'Analysis History',  path: '/reports',   icon: FileText },
+  { name: 'Settings',          path: '/settings',  icon: Settings },
+];
+
+// ── Layout ─────────────────────────────────────────────────────────────────
 
 export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const menuItems = [
-    { name: 'AI Log Analysis', path: '/dashboard', icon: <Monitor className="h-4.5 w-4.5" />, primary: false },
-    { name: 'Upload Logs', path: '/upload', icon: <Upload className="h-4.5 w-4.5 animate-pulse" />, primary: true },
-    { name: 'Analysis History', path: '/reports', icon: <FileText className="h-4.5 w-4.5" />, primary: false },
-    { name: 'Settings', path: '/settings', icon: <Settings className="h-4.5 w-4.5" />, primary: false },
-  ];
 
   const handleLogout = () => {
     logout();
@@ -35,84 +42,105 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
   const isActive = (path: string) => location.pathname === path;
 
+  /** User initials — first letter of each word, max 2 chars */
+  const initials = user?.name
+    ? user.name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '?';
+
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-[#f1f5f9] flex flex-col md:flex-row font-sans">
-      {/* Cmd+K Palette */}
+    <div className="min-h-screen bg-[#0F172A] text-[#F8FAFC] flex flex-col md:flex-row font-sans">
+
+      {/* Global Cmd+K search palette */}
       <CommandSearch />
 
+      {/* Top-of-screen thin progress bar */}
+      <ProgressBar isActive={false} progress={0} />
 
-{/* Sidebar - Desktop */}
-<aside className="hidden md:flex md:w-64 bg-[#12121a] border-r border-[#1e293b] flex-col shrink-0">
+      {/* ── Desktop Sidebar ── */}
+      <aside className="hidden md:flex md:w-64 bg-[#060913] border-r border-[#1E293B] flex-col shrink-0">
 
-  {/* Sidebar Header */}
-  <div className="px-3 py-4 border-b border-[#1e293b]">
-    <div className="flex justify-center overflow-hidden">
-      <div className="scale-[0.64] origin-center">
-        <SpringSightLogo />
-      </div>
-    </div>
+        {/* Logo area */}
+        <div className="px-4 py-4 border-b border-[#1E293B]">
+          <SpringSightLogo size="sm" />
+        </div>
 
- 
-  </div>
-
-  {/* Navigation */}
-  <nav className="flex-1 p-4 space-y-2.5">
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-1 relative">
           {menuItems.map((item) => {
             const active = isActive(item.path);
-            if (item.primary) {
-              return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`flex items-center px-4 py-3 rounded-lg text-xs font-bold tracking-wide transition-all duration-200 cursor-pointer ${
-                    active
-                      ? 'bg-blue-600 text-white border border-blue-400/30 shadow-lg shadow-blue-600/20'
-                      : 'bg-[#1b1b2f] border border-cyan-500/30 text-cyan-400 hover:border-cyan-400 hover:bg-[#20203a] hover:text-white'
-                  }`}
-                >
-                  <span className="mr-3">{item.icon}</span>
-                  {item.name}
-                  {!active && (
-                    <span className="ml-auto text-[8px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-mono font-bold uppercase tracking-wider">
-                      CTA
-                    </span>
-                  )}
-                </Link>
-              );
-            }
+            const Icon = item.icon;
 
             return (
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
-                  active
-                    ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30'
-                    : 'text-[#94a3b8] hover:bg-[#1a1a2e] hover:text-[#f1f5f9] border border-transparent'
-                }`}
+                className="relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wide cursor-pointer transition-colors duration-200 group"
+                style={{
+                  color: active ? '#F8FAFC' : '#94A3B8',
+                }}
               >
-                <span className="mr-3">{item.icon}</span>
-                {item.name}
+                {/* Framer Motion sliding active background */}
+                {active && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute inset-0 rounded-lg"
+                    style={{ backgroundColor: '#1E293B' }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+                  />
+                )}
+
+                {/* Cyan left accent on active */}
+                {active && (
+                  <motion.div
+                    layoutId="activeNavAccent"
+                    className="absolute left-0 top-[20%] bottom-[20%] w-0.5 rounded-full"
+                    style={{ backgroundColor: '#00C8FF' }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+                  />
+                )}
+
+                {/* Hover bg for inactive */}
+                {!active && (
+                  <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-[#1E293B]/60" />
+                )}
+
+                <Icon className="relative h-4 w-4 shrink-0 z-10" />
+                <span
+                  className="relative z-10 transition-colors duration-200"
+                  style={{ color: active ? '#F8FAFC' : undefined }}
+                >
+                  {item.name}
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        {/* User Card */}
-        <div className="p-4 border-t border-[#1e293b] bg-[#161622]/40">
+        {/* User card */}
+        <div className="p-4 border-t border-[#1E293B]">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="h-8 w-8 rounded-full bg-[#1a1a2e] border border-[#1e293b] flex items-center justify-center font-bold text-cyan-400">
-                {user?.name.charAt(0).toUpperCase()}
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Avatar */}
+              <div className="h-8 w-8 rounded-full bg-[#1E293B] border border-[#334155] flex items-center justify-center text-xs font-bold text-[#00C8FF] shrink-0">
+                {initials}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-[#f1f5f9] truncate">{user?.name}</p>
-                <p className="text-[9px] text-[#94a3b8] truncate">{user?.email}</p>
+                <p className="text-xs font-semibold text-[#F8FAFC] truncate leading-tight">
+                  {user?.name ?? 'User'}
+                </p>
+                <p className="text-[10px] text-[#64748B] leading-tight mt-0.5">
+                  Administrator
+                </p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="p-1.5 text-[#94a3b8] hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-colors cursor-pointer"
+              className="p-1.5 text-[#94A3B8] hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-colors duration-200 cursor-pointer shrink-0"
               title="Sign Out"
             >
               <LogOut className="h-4 w-4" />
@@ -121,79 +149,115 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         </div>
       </aside>
 
-      {/* Top Navigation - Mobile */}
-      <header className="md:hidden bg-[#12121a] border-b border-[#1e293b] px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+      {/* ── Mobile Top Bar ── */}
+      <header className="md:hidden bg-[#060913] border-b border-[#1E293B] px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <div className="h-7 w-7 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center font-bold text-white text-xs">
             S
           </div>
           <span className="font-extrabold text-sm text-white">SpringSight AI</span>
         </div>
-
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-1.5 text-[#94a3b8] hover:text-white rounded-lg cursor-pointer"
+          className="p-1.5 text-[#94A3B8] hover:text-white rounded-lg cursor-pointer transition-colors"
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </header>
 
-      {/* Mobile Drawer Navigation */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#12121a] border-b border-[#1e293b] px-4 py-3 space-y-1">
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center px-4 py-2.5 rounded-lg text-xs font-semibold ${
-                isActive(item.path)
-                  ? 'bg-blue-600/20 text-blue-400'
-                  : 'text-[#94a3b8]'
-              }`}
-            >
-              <span className="mr-3">{item.icon}</span>
-              {item.name}
-            </Link>
-          ))}
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              handleLogout();
-            }}
-            className="w-full flex items-center px-4 py-2.5 rounded-lg text-xs font-semibold text-red-400 hover:bg-red-950/20 cursor-pointer"
+      {/* ── Mobile Drawer ── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18 }}
+            className="md:hidden bg-[#060913] border-b border-[#1E293B] px-4 py-3 space-y-1"
           >
-            <LogOut className="mr-3 h-4.5 w-4.5" />
-            Sign Out
-          </button>
-        </div>
-      )}
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors duration-200 ${
+                    isActive(item.path)
+                      ? 'bg-[#1E293B] text-white border-l-2 border-[#00C8FF]'
+                      : 'text-[#94A3B8] hover:bg-[#1E293B]/60 hover:text-slate-200'
+                  }`}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  {item.name}
+                </Link>
+              );
+            })}
+            <button
+              onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-semibold text-red-400 hover:bg-red-950/20 cursor-pointer transition-colors"
+            >
+              <LogOut className="h-4 w-4 shrink-0" />
+              Sign Out
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Main Content Area */}
+      {/* ── Main Content Column ── */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Header Search Bar */}
-        <header className="hidden md:flex h-16 border-b border-[#1e293b] items-center justify-between px-8 bg-[#0a0a0f]">
-          {/* Global search launcher */}
+
+        {/* Desktop top header */}
+        <header className="hidden md:flex h-14 border-b border-[#1E293B] items-center justify-between px-6 bg-[#0F172A] shrink-0">
+
+          {/* Search launcher */}
           <button
             onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { ctrlKey: true, key: 'k' }))}
-            className="flex items-center space-x-3 bg-[#12121a]/80 border border-[#1e293b] rounded-lg px-4 py-2 text-xs text-[#94a3b8]/50 hover:border-cyan-500/40 hover:text-[#94a3b8] transition-all cursor-pointer w-72 text-left"
+            className="flex items-center gap-3 bg-[#1E293B]/60 border border-[#334155] rounded-lg px-4 py-2 text-xs text-[#64748B] hover:border-[#00C8FF]/30 hover:text-[#94A3B8] transition-all duration-200 cursor-pointer w-72 text-left"
           >
-            <Search className="h-4 w-4" />
-            <span className="flex-1">Search reports, exceptions, fixes...</span>
-            <kbd className="bg-[#1a1a2e] border border-[#1e293b] text-[9px] px-1.5 py-0.5 rounded font-mono text-cyan-400 font-bold uppercase">
+            <Search className="h-4 w-4 shrink-0" />
+            <span className="flex-1">Search logs, reports, stack traces...</span>
+            <kbd className="bg-[#0F172A] border border-[#334155] text-[9px] px-1.5 py-0.5 rounded font-mono text-[#00C8FF] font-bold uppercase">
               Ctrl+K
             </kbd>
           </button>
 
-          <div className="flex items-center space-x-4">
-            <span className="text-[10px] text-cyan-400 font-semibold flex items-center gap-1.5 bg-cyan-950/40 border border-cyan-500/20 px-2 py-1 rounded-full">
+          {/* Right actions */}
+          <div className="flex items-center gap-4">
+
+            {/* Diagnostics pill */}
+            <span className="text-[10px] text-cyan-400 font-semibold flex items-center gap-1.5 bg-cyan-950/40 border border-cyan-500/20 px-2 py-1 rounded-full whitespace-nowrap">
               <Bot className="h-3.5 w-3.5" />
               Diagnostics Core Online
             </span>
+
+            {/* Bell with badge */}
+            <div className="relative">
+              <button
+                aria-label="Notifications"
+                className="p-1.5 text-[#94A3B8] hover:text-white rounded-lg transition-colors duration-200 cursor-pointer"
+              >
+                <Bell className="h-5 w-5" />
+              </button>
+              <span
+                aria-label="3 notifications"
+                className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-bold pointer-events-none"
+              >
+                3
+              </span>
+            </div>
+
+            {/* User avatar */}
+            <div
+              title={user?.name}
+              className="w-8 h-8 rounded-full bg-[#1E293B] border border-[#334155] text-[#00C8FF] text-xs font-semibold flex items-center justify-center cursor-pointer hover:border-[#00C8FF]/60 transition-colors duration-200 select-none"
+            >
+              {initials}
+            </div>
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
+        {/* Page content */}
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           {children}
         </main>
@@ -201,4 +265,5 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
     </div>
   );
 };
+
 export default DashboardLayout;

@@ -4,6 +4,10 @@ import { AuthProvider } from './lib/auth';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { LoginPage } from './pages/LoginPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/VerifyEmailPage';
+import { SignUpPage } from './pages/SignUpPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { UploadPage } from './pages/UploadPage';
 import { ReportsPage } from './pages/ReportsPage';
@@ -12,8 +16,9 @@ import { FloatingAIButton } from './components/ui/floating-ai-button';
 
 const FloatingAssistantGate: React.FC = () => {
   const location = useLocation();
+  const publicAuthPaths = ['/', '/signup', '/forgot-password', '/reset-password', '/verify-email'];
 
-  if (location.pathname === '/') {
+  if (publicAuthPaths.includes(location.pathname)) {
     return null;
   }
 
@@ -25,8 +30,12 @@ export const App: React.FC = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public authentication route */}
+          {/* Public authentication routes */}
           <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
 
           {/* Secure Protected console routes */}
           <Route element={<ProtectedRoute />}>

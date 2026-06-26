@@ -41,4 +41,14 @@ public interface ParsedLogRepository extends JpaRepository<ParsedLog, Long> {
     @org.springframework.data.jpa.repository.Modifying
     @org.springframework.data.jpa.repository.Query("DELETE FROM ParsedLog p WHERE p.logFileId = :logFileId")
     void deleteByLogFileId(Long logFileId);
+
+    /**
+     * Retrieve only the parsed log entries matching specific log levels for a given file.
+     * Used by the AI context builder to fetch ERROR/WARN entries without loading INFO/DEBUG noise.
+     *
+     * @param logFileId the ID of the parent {@code LogFile}
+     * @param levels    list of log level strings to include (e.g. ["ERROR", "WARN"])
+     * @return filtered list of matching parsed log entries
+     */
+    List<ParsedLog> findByLogFileIdAndLogLevelIn(Long logFileId, List<String> levels);
 }

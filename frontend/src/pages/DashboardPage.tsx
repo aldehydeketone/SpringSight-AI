@@ -3,25 +3,52 @@ import { useNavigate } from 'react-router-dom';
 import { ReportsService } from '../services/reports.service';
 import { AiService } from '../services/ai.service';
 import { DashboardSummary, Report, ActivityEvent, ChartDataPoint, AiAnalysisRequest } from '../types';
-import { StatsCard } from '../components/ui/stats-card';
 import { AreaChart } from '../components/ui/area-chart';
 import { KineticLogStream } from '../components/ui/kinetic-log-stream';
 import {
-  AlertOctagon,
-  AlertTriangle,
-  Info,
-  Layers,
-  Download,
-  Trash2,
-  Eye,
-  ArrowRight,
-  Upload,
-  Cpu,
-  FileCode,
-  ShieldAlert,
-  Terminal,
-  Activity
+  AlertOctagon, AlertTriangle, Info, Layers, Download,
+  Trash2, Eye, ArrowRight, Upload, Cpu, FileCode,
+  ShieldAlert, Terminal, Activity
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { AiRecommendationPanel } from '../components/ui/ai-recommendation-panel';
+import { useToast, ToastContainer } from '../components/ui/atoms/toast';
+
+interface StatCardNewProps {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<any>;
+  accentColor: string;
+  description?: string;
+}
+
+const StatCardNew: React.FC<StatCardNewProps> = ({ label, value, icon: Icon, accentColor, description }) => (
+  <motion.div
+    className="bg-[#1E293B] rounded-xl p-5 border border-[#334155] hover:border-[#00C8FF]/30 transition-colors duration-200 cursor-default"
+    initial={{ opacity: 0, y: 16 }}
+    animate={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.02, y: -2 }}
+    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+  >
+    <div className="flex items-start justify-between mb-3">
+      <div
+        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+        style={{ backgroundColor: accentColor + '1a' }}
+      >
+        <Icon className="h-4 w-4" style={{ color: accentColor }} />
+      </div>
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-[#64748B]">
+        {label}
+      </span>
+    </div>
+    <div className="text-[28px] font-bold text-[#F8FAFC] leading-tight tracking-tight">
+      {value}
+    </div>
+    {description && (
+      <p className="text-xs text-[#64748B] mt-1">{description}</p>
+    )}
+  </motion.div>
+);
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,6 +65,8 @@ export const DashboardPage: React.FC = () => {
   const [sampleLoading, setSampleLoading] = useState(false);
   const [activityEvents, setActivityEvents] = useState<ActivityEvent[]>([]);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+
+  const { toasts, addToast, removeToast } = useToast();
 
   const fetchDashboardData = async () => {
     try {
@@ -102,7 +131,7 @@ export const DashboardPage: React.FC = () => {
     } catch (err) {
       console.error('Failed to fetch dashboard summary', err);
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 300); // min 300ms skeleton
     }
   };
 
@@ -153,28 +182,31 @@ export const DashboardPage: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Delete this report?')) {
-      try {
-        await ReportsService.deleteReport(id);
-        setReports((prev) => prev.filter((r) => r.id !== id));
-        const newReports = reports.filter((r) => r.id !== id);
-        const critical = newReports.filter((r) => r.severity === 'CRITICAL').length;
-        const high = newReports.filter((r) => r.severity === 'HIGH').length;
-        const medium = newReports.filter((r) => r.severity === 'MEDIUM').length;
-        const low = newReports.filter((r) => r.severity === 'LOW').length;
-        const totalErrors = newReports.reduce((acc, r) => acc + r.errorCount, 0);
+    // 1. Optimistic — remove immediately
+    const deletedReport = reports.find((r) => r.id === id);
+    setReports((prev) => prev.filter((r) => r.id !== id));
 
-        setDashboard({
-          totalReports: newReports.length,
-          criticalReports: critical,
-          highReports: high,
-          mediumReports: medium,
-          lowReports: low,
-          totalErrorsAnalyzed: totalErrors,
-        });
-      } catch (err) {
-        alert('Failed to delete report.');
+    // 2. Show toast
+    addToast('Report deleted.', 'success');
+
+    try {
+      await ReportsService.deleteReport(id);
+      // Update dashboard counts
+      const newReports = reports.filter((r) => r.id !== id);
+      setDashboard({
+        totalReports: newReports.length,
+        criticalReports: newReports.filter((r) => r.severity === 'CRITICAL').length,
+        highReports: newReports.filter((r) => r.severity === 'HIGH').length,
+        mediumReports: newReports.filter((r) => r.severity === 'MEDIUM').length,
+        lowReports: newReports.filter((r) => r.severity === 'LOW').length,
+        totalErrorsAnalyzed: newReports.reduce((acc, r) => acc + r.errorCount, 0),
+      });
+    } catch (err) {
+      // Revert on failure
+      if (deletedReport) {
+        setReports((prev) => [...prev, deletedReport].sort((a, b) => b.id - a.id));
       }
+      addToast('Failed to delete report.', 'error');
     }
   };
 
@@ -305,40 +337,75 @@ export const DashboardPage: React.FC = () => {
       ) : (
         <>
           {/* Stats Cards Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <StatsCard
-              title="Incident Investigations"
-              value={dashboard.totalReports}
-              icon={<Layers className="h-4 w-4" />}
-              description="Analyses generated"
-            />
-            <StatsCard
-              title="Critical Incidents"
-              value={dashboard.criticalReports}
-              icon={<AlertOctagon className="h-4 w-4 text-red-400" />}
-              trendType="down"
-              description="Requires immediate hotfix"
-            />
-            <StatsCard
-              title="High Severity"
-              value={dashboard.highReports}
-              icon={<AlertTriangle className="h-4 w-4 text-orange-400" />}
-              trendType="neutral"
-              description="Warning states"
-            />
-            <StatsCard
-              title="Medium Severity"
-              value={dashboard.mediumReports}
-              icon={<Info className="h-4 w-4 text-yellow-400" />}
-              description="Config warnings"
-            />
-            <StatsCard
-              title="Errors Analyzed"
-              value={dashboard.totalErrorsAnalyzed}
-              icon={<AlertOctagon className="h-4 w-4 text-rose-500" />}
-              description="Exceptions detected"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            {loading ? (
+              // 6 skeleton cards while loading
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-[#1E293B] rounded-xl p-5 border border-[#334155] animate-pulse">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-9 h-9 rounded-lg bg-[#263145]" />
+                    <div className="w-16 h-4 rounded bg-[#263145]" />
+                  </div>
+                  <div className="w-24 h-8 rounded bg-[#263145] mb-2" />
+                  <div className="w-32 h-3 rounded bg-[#263145]" />
+                </div>
+              ))
+            ) : (
+              <>
+                {/* Card 1 — Incident Investigations */}
+                <StatCardNew
+                  label="Incident Investigations"
+                  value={dashboard.totalReports}
+                  icon={Layers}
+                  accentColor="#3B82F6"
+                  description="Analyses generated"
+                />
+                {/* Card 2 — Critical Incidents */}
+                <StatCardNew
+                  label="Critical Incidents"
+                  value={dashboard.criticalReports}
+                  icon={AlertOctagon}
+                  accentColor="#EF4444"
+                  description="Requires immediate hotfix"
+                />
+                {/* Card 3 — High Severity */}
+                <StatCardNew
+                  label="High Severity"
+                  value={dashboard.highReports}
+                  icon={AlertTriangle}
+                  accentColor="#F97316"
+                  description="Warning states"
+                />
+                {/* Card 4 — Medium Severity */}
+                <StatCardNew
+                  label="Medium Severity"
+                  value={dashboard.mediumReports}
+                  icon={Info}
+                  accentColor="#F59E0B"
+                  description="Config warnings"
+                />
+                {/* Card 5 — Errors Analyzed */}
+                <StatCardNew
+                  label="Errors Analyzed"
+                  value={dashboard.totalErrorsAnalyzed}
+                  icon={AlertOctagon}
+                  accentColor="#F97316"
+                  description="Exceptions detected"
+                />
+                {/* Card 6 — AI Confidence STATIC */}
+                <StatCardNew
+                  label="AI Confidence"
+                  value="94%"
+                  icon={Cpu}
+                  accentColor="#00C8FF"
+                  description="High confidence"
+                />
+              </>
+            )}
           </div>
+
+          {/* ── AI Recommendation Panel ── */}
+          <AiRecommendationPanel reports={reports} isLoading={loading} />
 
           {/* Main Grid: Charts & Activity */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -437,22 +504,22 @@ export const DashboardPage: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-[#1e293b] bg-[#161622]/40 text-[#94a3b8] font-bold">
-                    <th className="px-5 py-3 font-mono">FILE</th>
-                    <th className="px-5 py-3 font-mono">SEVERITY</th>
-                    <th className="px-5 py-3 font-mono">LOGS</th>
-                    <th className="px-5 py-3 font-mono">ROOT CAUSE</th>
-                    <th className="px-5 py-3 font-mono">DATE</th>
-                    <th className="px-5 py-3 text-right font-mono">ACTIONS</th>
+                  <tr className="border-b border-[#1E293B] bg-[#263145]/40 text-[#64748B]">
+                    <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-widest">FILE</th>
+                    <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-widest">SEVERITY</th>
+                    <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-widest">LOGS</th>
+                    <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-widest">ROOT CAUSE</th>
+                    <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-widest">DATE</th>
+                    <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-widest">ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody>
                   {reports.map((rep) => (
                     <tr
                       key={rep.id}
-                      className="border-b border-[#1e293b]/55 hover:bg-[#161622]/20 transition-colors"
+                      className="border-b border-[#1e293b]/55 hover:bg-[#263145]/60 transition-colors"
                     >
-                      <td className="px-5 py-3.5 font-semibold text-[#f1f5f9]">{rep.filename}</td>
+                      <td className="px-5 py-3.5 font-mono text-[#00C8FF] text-[13px] truncate max-w-[160px]">{rep.filename}</td>
                       <td className="px-5 py-3.5">
                         <span className={`px-2 py-0.5 rounded border text-[9px] font-bold ${getSeverityColor(rep.severity)}`}>
                           {rep.severity}
@@ -476,7 +543,7 @@ export const DashboardPage: React.FC = () => {
                           </button>
                           <button
                             onClick={() => handleDownloadPdf(rep.id, rep.filename)}
-                            className="p-1 text-purple-400 hover:bg-[#1a1a2e] rounded transition-colors cursor-pointer"
+                            className="p-1 text-blue-400 hover:bg-[#1E293B] rounded transition-colors cursor-pointer"
                             title="Download PDF"
                           >
                             <Download className="h-4 w-4" />
@@ -498,6 +565,7 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       )}
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 };

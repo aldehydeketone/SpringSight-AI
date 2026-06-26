@@ -35,6 +35,15 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    /**
+     * True once the user has clicked the verification link in their registration email.
+     * Existing DB rows receive TRUE via the column default so they are not locked out.
+     * New Java entities default to false via @Builder.Default — they must verify first.
+     */
+    @Builder.Default
+    @Column(name = "email_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean emailVerified = false;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

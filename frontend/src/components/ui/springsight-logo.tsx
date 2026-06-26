@@ -2,27 +2,83 @@ import React, { useId } from 'react';
 import { cn } from '../../lib/utils';
 
 type SpringSightLogoProps = {
+  /** 'default' — full-size for auth pages / standalone use.
+   *  'sm'      — sidebar-fit rendered via actual element sizing,
+   *              NOT CSS transforms, so layout flow is correct. */
+  size?: 'default' | 'sm';
   className?: string;
 };
 
-export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) => {
+export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({
+  size = 'default',
+  className,
+}) => {
   const id = useId().replace(/:/g, '');
-  const glowId = `springsight-glow-${id}`;
-  const outerGlowId = `springsight-outer-glow-${id}`;
+  const glowId = `glow-${id}`;
+  const outerGlowId = `outerGlow-${id}`;
+
+  const isSm = size === 'sm';
+
+  // Precise sizing and spacing based on design specs
+  const svgWidth = isSm ? 60 : 72;
+  const svgHeight = isSm ? 40 : 48;
+  
+  // Proportional gap (20px at default -> scaled proportionally)
+  const gap = isSm ? '13px' : '20px';
+
+  // Fonts and Badge scaling
+  const textStyle: React.CSSProperties = {
+    fontFamily: "'Exo 2', Arial, sans-serif",
+    fontSize: isSm ? '1.5rem' : '52px',
+    fontWeight: 900,
+    fontStyle: 'italic',
+    letterSpacing: isSm ? '-0.46px' : '-1px',
+    lineHeight: 1,
+  };
+
+  const springStyle: React.CSSProperties = {
+    ...textStyle,
+    color: '#ffffff',
+    textShadow: '0 0 30px rgba(0,180,255,0.3)',
+  };
+
+  const sightStyle: React.CSSProperties = {
+    ...textStyle,
+    color: '#00aaff',
+    textShadow: '0 0 20px rgba(0,170,255,0.5)',
+  };
+
+  const badgeStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, #0088dd, #00ccff)',
+    color: '#ffffff',
+    fontFamily: "'Exo 2', Arial, sans-serif",
+    fontSize: isSm ? '8px' : '17px',
+    fontWeight: 900,
+    padding: isSm ? '2px 5px' : '4px 10px',
+    borderRadius: isSm ? '4px' : '8px',
+    marginLeft: isSm ? '5px' : '10px',
+    marginBottom: isSm ? '2px' : '4px',
+    letterSpacing: isSm ? '0.5px' : '1px',
+    boxShadow: '0 0 12px rgba(0,180,255,0.4)',
+    lineHeight: 1,
+  };
 
   return (
     <div
-  className={cn(
-    'inline-flex items-center justify-center gap-6 opacity-95 ',
-    '[filter:drop-shadow(0_0_14px_rgba(0,170,255,0.12))]',
-    className
-  )}
-  aria-label="SpringSight AI"
->
+      className={cn(
+        'inline-flex items-center justify-center select-none',
+        className
+      )}
+      style={{ gap }}
+      aria-label="SpringSight AI"
+    >
+      {/* Eye SVG — exact brand paths, filters, outline stroke, edge lines, and corner tips */}
       <svg
-        className="h-[60px] w-[90px] shrink-0"
+        width={svgWidth}
+        height={svgHeight}
         viewBox="0 0 150 100"
         xmlns="http://www.w3.org/2000/svg"
+        className="shrink-0"
         aria-hidden="true"
       >
         <defs>
@@ -42,12 +98,15 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) =
           </filter>
         </defs>
 
+        {/* Eye outer shape with blue border on dark bg */}
         <path
           d="M8,50 Q75,5 142,50 Q75,95 8,50 Z"
           fill="#0a1628"
-          stroke="#1a4a8a"
-          strokeWidth="1.5"
+          stroke="#d8e9ff"
+          strokeWidth="2"
         />
+
+        {/* Swirl arcs - outermost dark blue */}
         <path
           d="M118,50 C118,24 98,10 76,15 C57,19 43,34 43,50 C43,70 57,84 76,88 C94,92 112,80 116,65"
           fill="none"
@@ -55,6 +114,7 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) =
           strokeWidth="16"
           strokeLinecap="round"
         />
+        {/* Mid blue */}
         <path
           d="M110,50 C110,28 93,17 75,21 C60,25 50,37 50,50 C50,66 61,77 77,80 C92,83 107,72 110,60"
           fill="none"
@@ -63,6 +123,7 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) =
           strokeLinecap="round"
           filter={`url(#${glowId})`}
         />
+        {/* Bright cyan */}
         <path
           d="M100,50 C100,33 87,23 74,27 C63,30 56,40 56,50 C56,63 65,71 77,73 C88,75 99,67 101,57"
           fill="none"
@@ -71,6 +132,7 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) =
           strokeLinecap="round"
           filter={`url(#${glowId})`}
         />
+        {/* Inner highlight */}
         <path
           d="M90,50 C90,38 81,31 73,34 C66,37 62,44 62,50 C62,59 68,65 76,66 C84,67 91,61 92,54"
           fill="none"
@@ -79,34 +141,27 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({ className }) =
           strokeLinecap="round"
           filter={`url(#${glowId})`}
         />
+
+        {/* Center pupil glow */}
         <circle cx="74" cy="49" r="8" fill="#003a8a" opacity="0.8" />
         <circle cx="74" cy="49" r="5.5" fill="#00ccff" filter={`url(#${outerGlowId})`} />
         <circle cx="74" cy="49" r="3" fill="#ffffff" />
         <circle cx="72" cy="47" r="1" fill="rgba(255,255,255,0.7)" />
-        <path d="M8,50 Q75,5 142,50" fill="none" stroke="#0d2a52" strokeWidth="2" />
-        <path d="M8,50 Q75,95 142,50" fill="none" stroke="#0d2a52" strokeWidth="2" />
+
+        {/* Eye edge lines */}
+        <path d="M8,50 Q75,5 142,50" fill="none" stroke="#b7d5ff" strokeWidth="2" />
+        <path d="M8,50 Q75,95 142,50" fill="none" stroke="#b7d5ff" strokeWidth="2" />
+
+        {/* Eye corner sharp tips */}
         <polygon points="8,50 18,44 18,56" fill="#0a1628" />
         <polygon points="142,50 132,44 132,56" fill="#0a1628" />
       </svg>
 
-      <div className="flex items-center gap-2.5">
-        <div className="flex items-baseline whitespace-nowrap">
-          <span
-            className="font-['Exo_2',Arial,sans-serif] text-[2.4rem] font-extrabold italic leading-none tracking-[-0.02em] text-white"
-            style={{ textShadow: '0 0 30px rgba(0,180,255,0.3)' }}
-          >
-            Spring
-          </span>
-          <span
-            className="font-['Exo_2',Arial,sans-serif] text-[2.4rem] font-extrabold italic leading-none tracking-[-0.02em] text-[#00aaff]"
-            style={{ textShadow: '0 0 20px rgba(0,170,255,0.5)' }}
-          >
-            Sight
-          </span>
-        </div>
-        <span className="rounded-lg bg-gradient-to-br from-[#0088dd] to-[#00ccff] px-3 py-1 font-['Exo_2',Arial,sans-serif] text-[0.85rem] font-extrabold leading-none tracking-[0.08em] text-white shadow-[0_0_12px_rgba(0,180,255,0.4)]">
-          AI
-        </span>
+      {/* Wordmark + badge */}
+      <div className="flex items-baseline whitespace-nowrap">
+        <span style={springStyle}>Spring</span>
+        <span style={sightStyle}>Sight</span>
+        <span style={badgeStyle}>AI</span>
       </div>
     </div>
   );

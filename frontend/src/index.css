@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -5,6 +6,8 @@
     background-color: #060913;
     color: #f1f5f9;
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -87,3 +90,12 @@
   opacity: 0;
 }
 
+/* Auth Card — Border Beam */
+@keyframes border-beam-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-border-beam {
+  animation: border-beam-spin 12s linear infinite;
+}
