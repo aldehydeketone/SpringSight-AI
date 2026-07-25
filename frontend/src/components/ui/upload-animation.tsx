@@ -377,7 +377,7 @@ export const UploadAnimation: React.FC<UploadAnimationProps> = ({
   isUploading = false,
 }) => {
   return (
-    <div className="relative w-[320px] h-[240px] flex items-center justify-center select-none overflow-visible">
+    <div className="relative w-[320px] h-[240px] flex items-center justify-center select-none overflow-visible" style={{ transform: 'scale(0.65)' }}>
       {/* Layer 1: Ambient Background Glows */}
       <Glow />
 

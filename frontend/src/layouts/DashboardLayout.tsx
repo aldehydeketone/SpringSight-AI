@@ -225,10 +225,10 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
           {/* Right actions */}
           <div className="flex items-center gap-4">
 
-            {/* Diagnostics pill */}
-            <span className="text-[10px] text-cyan-400 font-semibold flex items-center gap-1.5 bg-cyan-950/40 border border-cyan-500/20 px-2 py-1 rounded-full whitespace-nowrap">
-              <Bot className="h-3.5 w-3.5" />
-              Diagnostics Core Online
+            {/* System status indicator */}
+            <span className="hidden lg:flex items-center gap-2 text-[11px] font-medium text-slate-300 bg-slate-800/50 border border-slate-700/40 px-3 py-1.5 rounded-lg whitespace-nowrap">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+              Diagnostics Online
             </span>
 
             {/* Bell with badge */}

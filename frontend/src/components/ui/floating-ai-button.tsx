@@ -123,9 +123,14 @@ export const FloatingAIButton: React.FC = () => {
       {/* Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer border border-cyan-400/20"
+        className={`relative h-14 w-14 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl border border-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-1 ${
+          isOpen
+            ? 'bg-slate-800/90 text-slate-300 hover:bg-slate-700/90'
+            : 'bg-gradient-to-br from-indigo-500/90 via-blue-500/90 to-cyan-500/90 text-white hover:shadow-[0_8px_30px_rgba(6,182,212,0.4)] hover:border-cyan-400/30'
+        }`}
       >
-        {isOpen ? <X className="h-5 w-5" /> : <Bot className="h-6 w-6" />}
+        {!isOpen && <div className="absolute inset-0 bg-gradient-to-tr from-cyan-400 to-indigo-400 opacity-20 blur-md pointer-events-none" />}
+        {isOpen ? <X className="h-6 w-6 relative z-10" /> : <Bot className="h-6 w-6 relative z-10" />}
       </button>
     </div>
   );

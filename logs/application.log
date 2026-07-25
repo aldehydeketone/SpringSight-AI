@@ -1,21 +1,21 @@
-2026-06-19T00:09:11.684+05:30  INFO 7676 --- [main] c.m.s.SpringsightAiApplication           : Starting SpringsightAiApplication using Java 26.0.1 with PID 7676 (C:\Users\ADMIN\Desktop\SpringSight-AI\target\classes started by Mihir in C:\Users\ADMIN\Desktop\SpringSight-AI)
-2026-06-19T00:09:11.703+05:30  INFO 7676 --- [main] c.m.s.SpringsightAiApplication           : No active profile set, falling back to 1 default profile: "default"
-2026-06-19T00:09:16.080+05:30  INFO 7676 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-06-19T00:09:16.945+05:30  INFO 7676 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 824 ms. Found 4 JPA repository interfaces.
-2026-06-19T00:09:18.746+05:30  INFO 7676 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-06-19T00:09:18.794+05:30  INFO 7676 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-06-19T00:09:18.795+05:30  INFO 7676 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
-2026-06-19T00:09:19.137+05:30  INFO 7676 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-06-19T00:09:19.138+05:30  INFO 7676 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7154 ms
-2026-06-19T00:09:19.797+05:30  INFO 7676 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-06-19T00:09:20.036+05:30  INFO 7676 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
-2026-06-19T00:09:20.171+05:30  INFO 7676 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-06-19T00:09:21.090+05:30  INFO 7676 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-06-19T00:09:21.185+05:30  INFO 7676 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-06-19T00:09:21.674+05:30  INFO 7676 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ceb11f9
-2026-06-19T00:09:21.678+05:30  INFO 7676 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-06-19T00:09:21.855+05:30  WARN 7676 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-06-19T00:09:21.941+05:30  INFO 7676 --- [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-06-28T23:02:32.506+05:30  INFO 15672 --- [main] c.m.s.SpringsightAiApplication           : Starting SpringsightAiApplication using Java 26.0.1 with PID 15672 (C:\Users\ADMIN\Desktop\SpringSight-AI\target\classes started by Mihir in C:\Users\ADMIN\Desktop\SpringSight-AI)
+2026-06-28T23:02:32.522+05:30  INFO 15672 --- [main] c.m.s.SpringsightAiApplication           : No active profile set, falling back to 1 default profile: "default"
+2026-06-28T23:02:40.131+05:30  INFO 15672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-28T23:02:41.076+05:30  INFO 15672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 877 ms. Found 6 JPA repository interfaces.
+2026-06-28T23:02:44.271+05:30  INFO 15672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-06-28T23:02:44.310+05:30  INFO 15672 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-28T23:02:44.311+05:30  INFO 15672 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-06-28T23:02:44.538+05:30  INFO 15672 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-28T23:02:44.539+05:30  INFO 15672 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 11844 ms
+2026-06-28T23:02:45.139+05:30  INFO 15672 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-28T23:02:45.387+05:30  INFO 15672 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-06-28T23:02:45.458+05:30  INFO 15672 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-28T23:02:46.047+05:30  INFO 15672 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-28T23:02:46.117+05:30  INFO 15672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-28T23:02:46.523+05:30  INFO 15672 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1a66be41
+2026-06-28T23:02:46.526+05:30  INFO 15672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-28T23:02:46.652+05:30  WARN 15672 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-28T23:02:46.685+05:30  INFO 15672 --- [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 9.7.1
@@ -23,56 +23,103 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-06-19T00:09:24.706+05:30  INFO 7676 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-06-19T00:09:25.115+05:30  INFO 7676 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-06-19T00:09:27.206+05:30  INFO 7676 --- [main] c.m.s.ai.service.GeminiService           : [GeminiService] Initialized with Gemini 2.5 Flash model
-2026-06-19T00:09:27.316+05:30  INFO 7676 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-06-19T00:09:28.797+05:30  INFO 7676 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
-2026-06-19T00:09:28.797+05:30  WARN 7676 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
-2026-06-19T00:09:29.327+05:30  WARN 7676 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-06-19T00:09:31.284+05:30  INFO 7676 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2026-06-19T00:09:31.307+05:30  INFO 7676 --- [main] c.m.s.SpringsightAiApplication           : Started SpringsightAiApplication in 21.192 seconds (process running for 22.744)
-2026-06-19T00:09:38.008+05:30  INFO 7676 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-06-19T00:09:38.009+05:30  INFO 7676 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-06-19T00:09:38.011+05:30  INFO 7676 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
-2026-06-19T00:52:50.992+05:30 ERROR 7676 --- [http-nio-8080-exec-4] c.m.s.security.JwtAuthFilter             : [JwtAuthFilter] JWT processing failed: MalformedJwtException — Invalid compact JWT string: Compact JWSs must contain exactly 2 period characters, and compact JWEs must contain exactly 4.  Found: 0
-2026-06-19T00:52:50.992+05:30 ERROR 7676 --- [http-nio-8080-exec-5] c.m.s.security.JwtAuthFilter             : [JwtAuthFilter] JWT processing failed: MalformedJwtException — Invalid compact JWT string: Compact JWSs must contain exactly 2 period characters, and compact JWEs must contain exactly 4.  Found: 0
-2026-06-19T00:52:51.237+05:30 ERROR 7676 --- [http-nio-8080-exec-2] c.m.s.security.JwtAuthFilter             : [JwtAuthFilter] JWT processing failed: MalformedJwtException — Invalid compact JWT string: Compact JWSs must contain exactly 2 period characters, and compact JWEs must contain exactly 4.  Found: 0
-2026-06-19T00:52:51.242+05:30 ERROR 7676 --- [http-nio-8080-exec-10] c.m.s.security.JwtAuthFilter             : [JwtAuthFilter] JWT processing failed: MalformedJwtException — Invalid compact JWT string: Compact JWSs must contain exactly 2 period characters, and compact JWEs must contain exactly 4.  Found: 0
-2026-06-19T01:15:53.816+05:30  INFO 9236 --- [main] c.m.s.SpringsightAiApplication           : Starting SpringsightAiApplication using Java 26.0.1 with PID 9236 (C:\Users\ADMIN\Desktop\SpringSight-AI\target\classes started by Mihir in C:\Users\ADMIN\Desktop\SpringSight-AI)
-2026-06-19T01:15:53.818+05:30  INFO 9236 --- [main] c.m.s.SpringsightAiApplication           : No active profile set, falling back to 1 default profile: "default"
-2026-06-19T01:15:55.202+05:30  INFO 9236 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-06-19T01:15:55.434+05:30  INFO 9236 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 217 ms. Found 4 JPA repository interfaces.
-2026-06-19T01:15:56.190+05:30  INFO 9236 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-06-19T01:15:56.207+05:30  INFO 9236 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-06-19T01:15:56.207+05:30  INFO 9236 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
-2026-06-19T01:15:56.282+05:30  INFO 9236 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-06-19T01:15:56.283+05:30  INFO 9236 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2395 ms
-2026-06-19T01:15:56.493+05:30  INFO 9236 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-06-19T01:15:56.575+05:30  INFO 9236 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
-2026-06-19T01:15:56.620+05:30  INFO 9236 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-06-19T01:15:57.025+05:30  INFO 9236 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-06-19T01:15:57.063+05:30  INFO 9236 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-06-19T01:15:57.330+05:30  INFO 9236 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@76b05c0
-2026-06-19T01:15:57.332+05:30  INFO 9236 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-06-19T01:15:57.401+05:30  WARN 9236 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-06-19T01:15:57.425+05:30  INFO 9236 --- [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
-	Database driver: undefined/unknown
-	Database version: 9.7.1
-	Autocommit mode: undefined/unknown
-	Isolation level: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-06-19T01:15:58.418+05:30  INFO 9236 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-06-19T01:15:58.522+05:30  INFO 9236 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-06-19T01:15:59.207+05:30  INFO 9236 --- [main] c.m.s.ai.service.GeminiService           : [GeminiService] Initialized with Gemini 2.5 Flash model
-2026-06-19T01:15:59.271+05:30  INFO 9236 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-06-19T01:15:59.832+05:30  INFO 9236 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
-2026-06-19T01:15:59.833+05:30  WARN 9236 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
-2026-06-19T01:16:00.033+05:30  WARN 9236 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-06-19T01:16:00.682+05:30  INFO 9236 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2026-06-19T01:16:00.693+05:30  INFO 9236 --- [main] c.m.s.SpringsightAiApplication           : Started SpringsightAiApplication in 7.46 seconds (process running for 8.237)
-2026-06-19T01:17:01.573+05:30  INFO 9236 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-06-19T01:17:01.573+05:30  INFO 9236 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-06-19T01:17:01.574+05:30  INFO 9236 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-06-28T23:02:48.558+05:30  INFO 15672 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-28T23:02:48.769+05:30  INFO 15672 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28T23:02:49.655+05:30  INFO 15672 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-28T23:02:50.561+05:30  INFO 15672 --- [main] c.m.s.ai.service.GeminiService           : [GeminiService] Initialized with Gemini 2.5 Flash model
+2026-06-28T23:02:50.562+05:30  INFO 15672 --- [main] c.m.s.ai.service.GeminiService           : [GeminiService] Gemini config loaded. url=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent, apiKeyConfigured=true, debugReturnRawError=true
+2026-06-28T23:02:51.124+05:30  INFO 15672 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-28T23:02:51.125+05:30  WARN 15672 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-28T23:02:51.413+05:30  WARN 15672 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-28T23:02:52.563+05:30  INFO 15672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-06-28T23:02:52.577+05:30  INFO 15672 --- [main] c.m.s.SpringsightAiApplication           : Started SpringsightAiApplication in 21.297 seconds (process running for 22.273)
+2026-06-28T23:03:12.013+05:30  INFO 15672 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-28T23:03:12.013+05:30  INFO 15672 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-28T23:03:12.015+05:30  INFO 15672 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-06-28T23:03:50.274+05:30  INFO 15672 --- [http-nio-8080-exec-3] c.m.s.log.controller.LogFileController   : [LogFileController] Upload request received: spirng.log.txt
+2026-06-28T23:03:50.288+05:30  INFO 15672 --- [http-nio-8080-exec-3] c.m.s.log.service.LogFileService         : [LogFileService] File saved to disk: C:\Users\ADMIN\Desktop\SpringSight-AI\uploads\36da0534-e9f0-45c4-97f1-842b3ca33c67_spirng.log.txt
+2026-06-28T23:03:50.352+05:30  INFO 15672 --- [http-nio-8080-exec-3] c.m.s.log.service.LogFileService         : [LogFileService] LogFile record saved with ID: 53
+2026-06-28T23:03:50.388+05:30  INFO 15672 --- [http-nio-8080-exec-7] c.m.s.log.controller.LogParseController  : [LogParseController] Parse request received for logFileId=53
+2026-06-28T23:03:50.389+05:30  INFO 15672 --- [http-nio-8080-exec-7] c.m.s.log.service.LogParserService       : [LogParserService] Started parsing file — logFileId=53
+2026-06-28T23:03:50.770+05:30  INFO 15672 --- [http-nio-8080-exec-7] c.m.s.log.service.LogParserService       : [LogParserService] Completed parsing — logFileId=53, total=304, parsed=93, ignored=34
+2026-06-28T23:03:50.821+05:30  INFO 15672 --- [http-nio-8080-exec-4] c.m.s.l.c.LogAnalysisController          : [LogAnalysisController] Request received for log analysis of fileId=53
+2026-06-28T23:03:50.822+05:30  INFO 15672 --- [http-nio-8080-exec-4] c.m.s.log.service.LogAnalysisService     : [LogAnalysisService] Starting analysis for fileId=53
+2026-06-28T23:03:50.861+05:30  INFO 15672 --- [http-nio-8080-exec-4] c.m.s.log.service.LogAnalysisService     : [LogAnalysisService] Analysis completed for fileId=53. HealthStatus=GOOD
+2026-06-28T23:03:50.935+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.controller.AiController         : [AiController] Root cause analysis requested for file: spirng.log.txt
+2026-06-28T23:03:50.935+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Starting root cause analysis for file: spirng.log.txt
+2026-06-28T23:03:50.936+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] AI Context Builder: ENABLED
+2026-06-28T23:03:50.936+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Resolved logFileId=53 — building enriched AI context
+2026-06-28T23:03:50.937+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.LogAiContextBuilder     : [LogAiContextBuilder] Building AI context for logFileId=53
+2026-06-28T23:03:50.950+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.LogAiContextBuilder     : [LogAiContextBuilder] Loaded 15 ERROR/WARN entries for logFileId=53
+2026-06-28T23:03:50.965+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.LogAiContextBuilder     : [LogAiContextBuilder] Context built — errors=3, warns=10, exceptions=0, traces=0
+2026-06-28T23:03:50.966+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Parsed Logs Used: 13
+2026-06-28T23:03:50.967+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] ERROR count: 3
+2026-06-28T23:03:50.967+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] WARN count: 10
+2026-06-28T23:03:50.967+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] INFO count: 78
+2026-06-28T23:03:50.967+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Number of log lines sent to Gemini: 13
+2026-06-28T23:03:50.970+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Enriched prompt built. length=5692
+2026-06-28T23:03:50.970+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Prompt length=5692
+2026-06-28T23:03:50.970+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Prompt Length: 5692
+2026-06-28T23:03:50.979+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Sending request to Gemini endpoint https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.A...Sjuw
+2026-06-28T23:04:00.803+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Raw JSON response received from Gemini
+2026-06-28T23:04:00.808+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Raw Gemini response: ```json
+{
+  "rootCause": "The application is experiencing persistent failures when attempting to communicate with an external AI service, identified as GeminiService. The external service is consistently returning a 503 status code with the reason 'AI service is temporarily unavailable' even after multiple retry attempts.",
+  "severity": "HIGH",
+  "impact": "Features or operations within the application that rely on the GeminiService are currently non-functional. Users attempting to use these features will experience failures or degraded functionality due to the external service's unavailability. The application is unable to complete its intended operations involving the GeminiService, leading to continuous retries and eventual final failures.",
+  "recommendedFix": "1. Check the operational status page or health dashboard for the external AI service (GeminiService) to confirm a widespread outage.\n2. Contact the provider of the external AI service to report the persistent 503 errors and 'AI service is temporarily unavailable' status.\n3. Investigate if there are alternative configurations or endpoints for the GeminiService that could be used as a fallback, or if specific network conditions are preventing access.",
+  "preventionSteps": "Implement robust circuit breaker patterns for external service calls to prevent cascading failures and allow graceful degradation. Establish proactive monitoring and alerting specifically for the health and availability of critical external dependencies like the GeminiService.",
+  "confidence": "HIGH"
+}
+```
+2026-06-28T23:04:00.809+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Cleaned JSON response: {
+  "rootCause": "The application is experiencing persistent failures when attempting to communicate with an external AI service, identified as GeminiService. The external service is consistently returning a 503 status code with the reason 'AI service is temporarily unavailable' even after multiple retry attempts.",
+  "severity": "HIGH",
+  "impact": "Features or operations within the application that rely on the GeminiService are currently non-functional. Users attempting to use these features will experience failures or degraded functionality due to the external service's unavailability. The application is unable to complete its intended operations involving the GeminiService, leading to continuous retries and eventual final failures.",
+  "recommendedFix": "1. Check the operational status page or health dashboard for the external AI service (GeminiService) to confirm a widespread outage.\n2. Contact the provider of the external AI service to report the persistent 503 errors and 'AI service is temporarily unavailable' status.\n3. Investigate if there are alternative configurations or endpoints for the GeminiService that could be used as a fallback, or if specific network conditions are preventing access.",
+  "preventionSteps": "Implement robust circuit breaker patterns for external service calls to prevent cascading failures and allow graceful degradation. Establish proactive monitoring and alerting specifically for the health and availability of critical external dependencies like the GeminiService.",
+  "confidence": "HIGH"
+}
+2026-06-28T23:04:00.825+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Hallucination Validation: PASSED
+2026-06-28T23:04:00.826+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.service.GeminiService           : [GeminiService] Root cause analysis completed. Severity=HIGH, Confidence=HIGH
+2026-06-28T23:04:00.855+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.ai.controller.AiController         : [AiController] Root cause analysis completed. Severity: HIGH, Confidence: HIGH
+2026-06-28T23:05:10.163+05:30  INFO 15672 --- [http-nio-8080-exec-7] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] Generating PDF for report ID: 30
+2026-06-28T23:05:10.309+05:30  INFO 15672 --- [http-nio-8080-exec-7] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] PDF generated successfully for report ID: 30
+2026-06-28T23:05:16.459+05:30  INFO 15672 --- [http-nio-8080-exec-4] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] Generating PDF for report ID: 29
+2026-06-28T23:05:16.466+05:30  INFO 15672 --- [http-nio-8080-exec-4] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] PDF generated successfully for report ID: 29
+2026-06-28T23:05:21.448+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] Generating PDF for report ID: 28
+2026-06-28T23:05:21.454+05:30  INFO 15672 --- [http-nio-8080-exec-9] c.m.s.r.s.impl.PdfReportServiceImpl      : [PdfReportService] PDF generated successfully for report ID: 28
+2026-06-28T23:07:04.505+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.controller.AiController         : [AiController] Root cause analysis requested for file: production-spring-boot.log
+2026-06-28T23:07:04.506+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Starting root cause analysis for file: production-spring-boot.log
+2026-06-28T23:07:04.510+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] No reliable LogFile match found for userId=12 and filename='production-spring-boot.log'
+2026-06-28T23:07:04.511+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] AI Context Builder: FALLBACK
+2026-06-28T23:07:04.511+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] AI Context Builder: FALLBACK
+2026-06-28T23:07:04.511+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] No reliable log evidence could be resolved — using summary-based prompt
+2026-06-28T23:07:04.511+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Prompt length=3262
+2026-06-28T23:07:04.511+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Prompt Length: 3262
+2026-06-28T23:07:04.512+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Sending request to Gemini endpoint https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.A...Sjuw
+2026-06-28T23:07:24.175+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Raw JSON response received from Gemini
+2026-06-28T23:07:24.175+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Raw Gemini response: {
+  "rootCause": "Cannot be determined from the provided logs.",
+  "severity": "CRITICAL",
+  "impact": "The application is unable to start or initialize correctly due to an `Error creating bean with name 'entityManagerFactory'` and a `Communications link failure`. This results in complete service unavailability for users and impacts core application functionality that relies on database access.",
+  "recommendedFix": "1. Investigate the `com.mysql.cj.jdbc.exceptions.CommunicationsException` by verifying network connectivity from the application host to the MySQL database host.\n2. Check the status and availability of the MySQL database server.\n3. Review the application's database connection configuration (e.g., hostname, port, database name, user, password) for any misconfigurations.\n4. Examine the MySQL database server logs for any connection attempts, rejections, or errors.",
+  "preventionSteps": "Implement comprehensive monitoring for database server availability and connection health. Ensure application database connection parameters are robustly managed and validated during deployment.",
+  "confidence": "LOW"
+}
+2026-06-28T23:07:24.175+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Cleaned JSON response: {
+  "rootCause": "Cannot be determined from the provided logs.",
+  "severity": "CRITICAL",
+  "impact": "The application is unable to start or initialize correctly due to an `Error creating bean with name 'entityManagerFactory'` and a `Communications link failure`. This results in complete service unavailability for users and impacts core application functionality that relies on database access.",
+  "recommendedFix": "1. Investigate the `com.mysql.cj.jdbc.exceptions.CommunicationsException` by verifying network connectivity from the application host to the MySQL database host.\n2. Check the status and availability of the MySQL database server.\n3. Review the application's database connection configuration (e.g., hostname, port, database name, user, password) for any misconfigurations.\n4. Examine the MySQL database server logs for any connection attempts, rejections, or errors.",
+  "preventionSteps": "Implement comprehensive monitoring for database server availability and connection health. Ensure application database connection parameters are robustly managed and validated during deployment.",
+  "confidence": "LOW"
+}
+2026-06-28T23:07:24.179+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Hallucination Validation: PASSED
+2026-06-28T23:07:24.179+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.service.GeminiService           : [GeminiService] Root cause analysis completed. Severity=CRITICAL, Confidence=LOW
+2026-06-28T23:07:24.190+05:30  INFO 15672 --- [http-nio-8080-exec-8] c.m.s.ai.controller.AiController         : [AiController] Root cause analysis completed. Severity: CRITICAL, Confidence: LOW
+2026-06-28T23:19:21.395+05:30  INFO 15672 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-28T23:19:21.403+05:30  INFO 15672 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-28T23:19:23.426+05:30  INFO 15672 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-28T23:19:23.429+05:30  INFO 15672 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-28T23:19:23.431+05:30  INFO 15672 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

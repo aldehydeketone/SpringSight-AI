@@ -28,6 +28,7 @@ const FloatingAssistantGate: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <AuthProvider>
+      <div className="bg-noise" />
       <Router>
         <Routes>
           {/* Public authentication routes */}

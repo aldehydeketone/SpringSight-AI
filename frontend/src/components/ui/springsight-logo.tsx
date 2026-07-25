@@ -20,19 +20,19 @@ export const SpringSightLogo: React.FC<SpringSightLogoProps> = ({
   const isSm = size === 'sm';
 
   // Precise sizing and spacing based on design specs
-  const svgWidth = isSm ? 60 : 72;
-  const svgHeight = isSm ? 40 : 48;
+  const svgWidth = isSm ? 50 : 72;
+  const svgHeight = isSm ? 34 : 48;
   
-  // Proportional gap (20px at default -> scaled proportionally)
-  const gap = isSm ? '13px' : '20px';
+  // Proportional gap
+  const gap = isSm ? '8px' : '20px';
 
   // Fonts and Badge scaling
   const textStyle: React.CSSProperties = {
     fontFamily: "'Exo 2', Arial, sans-serif",
-    fontSize: isSm ? '1.5rem' : '52px',
+    fontSize: isSm ? '1.35rem' : '52px',
     fontWeight: 900,
     fontStyle: 'italic',
-    letterSpacing: isSm ? '-0.46px' : '-1px',
+    letterSpacing: isSm ? '-0.3px' : '-1px',
     lineHeight: 1,
   };
 
