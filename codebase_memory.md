@@ -12,10 +12,10 @@ This document serves as the permanent architectural brain of the SpringSight AI 
 ---
 
 ## 2. Tech Stack
-* **Backend**: Java 17, Spring Boot 3.2.x, Spring Security 6.x, Spring Data JPA, Hibernate, OpenPDF 2.0.3, Maven.
+* **Backend**: Java 17, Spring Boot 3.2.x, Spring Security 6.x, Spring Data JPA, Spring Data Redis, Hibernate, OpenPDF 2.0.3, Maven.
 * **Frontend**: React 19 (compiled with Vite 6), TypeScript, TailwindCSS 4, Framer Motion 12, Recharts 2.
-* **Database**: MySQL/MariaDB (JPA/Hibernate dialect).
-* **AI Provider**: Google Gemini API (`gemini-1.5-flash` model via HTTP REST request).
+* **Database & Cache**: MySQL/MariaDB (JPA/Hibernate dialect), Redis 7 (Spring Cache abstraction + Rate limiting).
+* **AI Provider**: Google Gemini API (`gemini-2.5-flash` model via HTTP REST request).
 * **Styling**: Sleek dark mode (`#020617` background) with vanilla CSS used for precise animation controls. Brand name must always remain exactly **SpringSight**.
 
 ---
@@ -39,6 +39,14 @@ This document serves as the permanent architectural brain of the SpringSight AI 
 ### Architectural Rules
 * **Rule**: Controllers MUST use DTOs, not JPA entities, for external API contracts. Exposing entities directly causes security vulnerabilities (e.g., exposing passwords, lazy-loaded relation loops, or SQL mapping leaks).
 * DTOs decouple the database schema from the API contract, permitting safe schema modification without breaking frontend integrations.
+
+---
+
+## 3.1 Redis Caching & Rate Limiting Architecture
+* **Redis Configuration**: Configured in `config/RedisConfig.java` using `GenericJackson2JsonRedisSerializer`.
+* **Dashboard Cache (`dashboardSummary`)**: 10-minute TTL. Evicted automatically on log upload, report save, or report deletion.
+* **AI Analysis Cache (`aiAnalysis`)**: 24-hour TTL. Caches AI root-cause DTOs by `logFileId`.
+* **AI Endpoint Rate Limiting**: Enforced in `RateLimitInterceptor.java` registered via `WebMvcConfig.java`. Limit: 20 req/hour per user (fixed 1-hour counter window using Redis `INCR`). Exceeding returns HTTP 429 JSON payload.
 
 ---
 

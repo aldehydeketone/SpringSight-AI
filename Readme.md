@@ -114,34 +114,42 @@ MySQL Database
 
 ---
 
+### ⚡ Redis Caching & Performance
+* **Dashboard Summary Cache**: 10-minute TTL, evicts automatically on log upload, report creation, or deletion.
+* **AI Analysis Cache**: 24-hour TTL, caches AI root-cause DTOs indexed by `logFileId` to eliminate duplicate Gemini API calls.
+* **API Rate Limiting**: 20 requests/hour per user on `/api/ai/**` endpoints via Redis counter window with structured JSON HTTP 429 response.
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Backend
 
 * Java 17
 * Spring Boot 3
-* Spring Security
-* Spring Data JPA
-* Hibernate
+* Spring Security (Stateless JWT)
+* Spring Data JPA & Hibernate
+* Spring Data Redis (Spring Cache Abstraction)
 * Maven
 
-### Database
+### Cache & Database
 
-* MySQL
+* Redis 7 (In-Memory Caching & Rate Limiting)
+* MySQL (Persistent Source of Truth)
 
 ### Frontend
 
-* React
-* Tailwind CSS
+* React + Vite + TypeScript
+* Tailwind CSS + Framer Motion
+* Shadcn UI + Duotone Phosphor Icons
 
 ### AI
 
-* Google Gemini API
+* Google Gemini API (2.5 Flash)
 
 ### DevOps
 
-* Docker
-* Docker Compose
+* Docker & Docker Compose
 
 ---
 
