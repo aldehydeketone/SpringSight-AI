@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { AuthService } from '../services/auth.service';
-import { BackgroundEffect } from '../components/ui/background-effect';
-import { SpringSightLogo } from '../components/ui/springsight-logo';
+import { AuthLayout } from '../components/ui/auth-layout';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { CircleNotch, ArrowRight } from '@phosphor-icons/react';
 
 export const ResetPasswordPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -12,9 +15,6 @@ export const ResetPasswordPage: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const inputClassName =
-    'flex h-10 w-full rounded-md border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-zinc-500 focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-white/10';
 
   const getErrorMessage = (err: unknown) => {
     if (err && typeof err === 'object' && 'response' in err) {
@@ -39,6 +39,11 @@ export const ResetPasswordPage: React.FC = () => {
       return;
     }
 
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+
     setLoading(true);
     try {
       const responseMessage = await AuthService.resetPassword({ token, newPassword });
@@ -53,85 +58,81 @@ export const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-16 font-sans">
-      <BackgroundEffect />
+    <AuthLayout
+      title="Set New Password"
+      description="Enter your new password below to reset your account credentials."
+    >
+      {message && (
+        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm rounded-xl text-center">
+          {message}
+        </div>
+      )}
 
-      <div className="relative z-10 w-full max-w-[420px]">
-        <div className="mb-7 flex w-full justify-center">
-          <SpringSightLogo />
+      {error && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl text-center">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="newPassword" className="text-sm font-medium text-white/80">
+            New Password <span className="text-cyan-400 font-normal ml-0.5">*</span>
+          </Label>
+          <Input
+            id="newPassword"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            minLength={8}
+            placeholder="Min. 8 characters"
+            disabled={loading}
+            className="h-12 px-4 text-base bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 focus-visible:bg-white/[0.07] focus-visible:border-cyan-400/50 focus-visible:ring-1 focus-visible:ring-cyan-400/50 transition-all rounded-xl"
+          />
         </div>
 
-        <div className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] p-8 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-          <div className="mb-6 space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight text-white">Reset password</h1>
-            <p className="text-sm text-zinc-400">Choose a new password for your account.</p>
-          </div>
-
-          {message && (
-            <div className="mb-5 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
-              {message}
-            </div>
-          )}
-
-          {error && (
-            <div className="mb-5 rounded-md border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="newPassword" className="text-sm font-medium text-zinc-300">
-                New Password
-              </label>
-              <input
-                id="newPassword"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                minLength={8}
-                placeholder="NewPassword123"
-                className={inputClassName}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="text-sm font-medium text-zinc-300">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={8}
-                placeholder="Confirm password"
-                className={inputClassName}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 flex h-10 w-full items-center justify-center rounded-md bg-white text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="text-sm font-medium text-white underline-offset-4 transition-colors hover:text-zinc-200 hover:underline"
-            >
-              Back to sign in
-            </Link>
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-white/80">
+            Confirm Password <span className="text-cyan-400 font-normal ml-0.5">*</span>
+          </Label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            minLength={8}
+            placeholder="Confirm password"
+            disabled={loading}
+            className="h-12 px-4 text-base bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 focus-visible:bg-white/[0.07] focus-visible:border-cyan-400/50 focus-visible:ring-1 focus-visible:ring-cyan-400/50 transition-all rounded-xl"
+          />
         </div>
-      </div>
-    </div>
+
+        <div className="pt-3">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 bg-white text-black hover:bg-zinc-200 rounded-xl text-base font-semibold transition-all cursor-pointer"
+          >
+            {loading ? (
+              <CircleNotch className="mr-2 h-5 w-5 animate-spin" weight="bold" />
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Reset Password
+                <ArrowRight className="h-5 w-5" weight="bold" />
+              </span>
+            )}
+          </Button>
+        </div>
+      </form>
+
+      <p className="mt-8 text-center text-sm text-white/50">
+        <Link to="/" className="font-semibold text-white hover:text-cyan-400 transition-colors">
+          ← Back to sign in
+        </Link>
+      </p>
+    </AuthLayout>
   );
 };
 

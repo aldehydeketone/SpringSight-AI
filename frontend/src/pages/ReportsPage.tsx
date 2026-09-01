@@ -3,16 +3,22 @@ import { useLocation } from 'react-router-dom';
 import { ReportsService } from '../services/reports.service';
 import { Report } from '../types';
 import {
-  Search,
-  Calendar,
-  AlertOctagon,
-  Download,
-  Trash2,
+  MagnifyingGlass,
+  CalendarBlank,
+  WarningOctagon,
+  DownloadSimple,
+  Trash,
   ShieldCheck,
   CheckCircle,
-  Eye,
-  FileText
-} from 'lucide-react';
+  FileText,
+  Copy,
+  Check,
+  Lightning,
+  Clock,
+  Stack,
+  Sparkle,
+} from '@phosphor-icons/react';
+import { GlowCard } from '../components/ui/glow-card';
 
 export const ReportsPage: React.FC = () => {
   const location = useLocation();
@@ -21,6 +27,7 @@ export const ReportsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [severityFilter, setSeverityFilter] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
   const getReportTitle = (rep: Report) => {
     const root = rep.rootCause?.toLowerCase() || '';
@@ -48,7 +55,6 @@ export const ReportsPage: React.FC = () => {
       const list = await ReportsService.getUserReports();
       setReports(list);
 
-      // Handle deep-linked selected report from dashboard
       const stateReportId = location.state?.selectedReportId;
       if (stateReportId) {
         const found = list.find((r) => r.id === Number(stateReportId));
@@ -72,7 +78,7 @@ export const ReportsPage: React.FC = () => {
   }, [location.state]);
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Delete this report?')) {
+    if (window.confirm('Delete this incident report?')) {
       try {
         await ReportsService.deleteReport(id);
         setReports((prev) => prev.filter((r) => r.id !== id));
@@ -80,7 +86,7 @@ export const ReportsPage: React.FC = () => {
           setSelectedReport(null);
         }
       } catch (err) {
-        alert('Failed to delete.');
+        alert('Failed to delete report.');
       }
     }
   };
@@ -93,27 +99,33 @@ export const ReportsPage: React.FC = () => {
     }
   };
 
+  const handleCopyText = (text: string, sectionId: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedSection(sectionId);
+    setTimeout(() => setCopiedSection(null), 2000);
+  };
+
   const getSeverityBadgeClass = (sev?: string) => {
     switch (sev?.toUpperCase()) {
       case 'CRITICAL':
-        return 'text-red-400 bg-red-950/40 border-red-800/40';
+        return 'text-red-400 bg-red-500/10 border-red-500/30';
       case 'HIGH':
-        return 'text-orange-400 bg-orange-950/40 border-orange-800/40';
+        return 'text-orange-400 bg-orange-500/10 border-orange-500/30';
       case 'MEDIUM':
-        return 'text-yellow-400 bg-yellow-950/40 border-yellow-800/40';
+        return 'text-amber-400 bg-amber-500/10 border-amber-500/30';
       default:
-        return 'text-blue-400 bg-blue-950/40 border-blue-800/40';
+        return 'text-sky-400 bg-sky-500/10 border-sky-500/30';
     }
   };
 
   const getConfidenceBadgeClass = (conf?: string) => {
     switch (conf?.toUpperCase()) {
       case 'HIGH':
-        return 'text-green-400 bg-green-950/40 border-green-800/40';
+        return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
       case 'MEDIUM':
-        return 'text-yellow-400 bg-yellow-950/40 border-yellow-800/40';
+        return 'text-amber-400 bg-amber-500/10 border-amber-500/30';
       default:
-        return 'text-red-400 bg-red-950/40 border-red-800/40';
+        return 'text-red-400 bg-red-500/10 border-red-500/30';
     }
   };
 
@@ -128,10 +140,10 @@ export const ReportsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center font-mono text-xs">
-        <div className="flex flex-col items-center space-y-2">
-          <div className="h-4 w-4 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
-          <span className="text-[#94a3b8]">Loading incidents database...</span>
+      <div className="min-h-[70vh] flex items-center justify-center font-sans text-xs">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="h-6 w-6 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+          <span className="text-slate-400 font-medium">Loading incident investigation reports...</span>
         </div>
       </div>
     );
@@ -142,69 +154,79 @@ export const ReportsPage: React.FC = () => {
       {/* Sidebar List */}
       <div className="lg:col-span-1 space-y-4">
         {/* Filters */}
-        <div className="bg-[#12121a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+        <div className="bg-[#0e1320] border border-slate-800/80 rounded-xl p-3.5 space-y-3 shadow-md">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#94a3b8]/50" />
+            <MagnifyingGlass className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" weight="bold" />
             <input
               type="text"
-              placeholder="Search reports or classes..."
+              placeholder="Search reports by title or file..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0a0a0f] border border-[#1e293b] rounded-lg pl-9 pr-4 py-2 text-xs text-[#f1f5f9] placeholder-[#94a3b8]/40 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-[#080c14] border border-slate-700/60 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition-colors"
             />
           </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-[10px] text-[#94a3b8] uppercase font-bold tracking-wider">Severity:</span>
-            <select
-              value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value)}
-              className="bg-[#0a0a0f] border border-[#1e293b] rounded text-[10px] text-[#f1f5f9] px-2 py-1 focus:outline-none"
-            >
-              <option value="ALL">ALL</option>
-              <option value="CRITICAL">CRITICAL</option>
-              <option value="HIGH">HIGH</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="LOW">LOW</option>
-            </select>
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-800/60">
+            <span className="text-[10px] text-slate-400 uppercase font-semibold tracking-wider">Filter:</span>
+            <div className="flex gap-1">
+              {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map((sev) => (
+                <button
+                  key={sev}
+                  onClick={() => setSeverityFilter(sev)}
+                  className={`text-[10px] px-2 py-0.5 rounded-md font-medium transition-colors cursor-pointer ${
+                    severityFilter === sev
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                  }`}
+                >
+                  {sev}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* List of Reports */}
-        <div className="space-y-2.5 max-h-[600px] overflow-y-auto scrollbar-thin">
+        <div className="space-y-2 max-h-[620px] overflow-y-auto scrollbar-thin pr-0.5">
           {filtered.length === 0 ? (
-            <div className="text-center py-10 text-xs text-[#94a3b8] italic bg-[#12121a]/30 border border-[#1e293b]/40 rounded-xl">
-              No incident investigations match filters.
+            <div className="text-center py-12 text-xs text-slate-500 bg-[#0e1320]/40 border border-slate-800/50 rounded-xl">
+              No incident investigations match criteria.
             </div>
           ) : (
-            filtered.map((rep) => (
-              <button
-                key={rep.id}
-                onClick={() => setSelectedReport(rep)}
-                className={`w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
-                  selectedReport?.id === rep.id
-                    ? 'bg-blue-600/15 border-blue-500/50 shadow-md shadow-blue-500/5'
-                    : 'bg-[#12121a] border-[#1e293b] hover:border-blue-500/30'
-                }`}
-              >
-                <div className="flex items-start justify-between space-x-2">
-                  <h4 className="text-xs font-bold text-white leading-snug">{getReportTitle(rep)}</h4>
-                  <span className={`px-1.5 py-0.5 rounded border text-[8px] font-extrabold font-mono tracking-wider shrink-0 ${getSeverityBadgeClass(rep.severity)}`}>
-                    {rep.severity}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2 text-[9px] text-[#94a3b8]/60 mt-2 font-mono">
-                  <span>File: {rep.filename}</span>
-                </div>
-                <div className="flex items-center justify-between text-[9px] text-[#94a3b8]/60 mt-3 pt-2.5 border-t border-[#1e293b]/30">
-                  <span className="flex items-center gap-1 font-mono">
-                    <Calendar className="h-3 w-3" />
-                    {new Date(rep.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
-                  </span>
-                  <span className="font-mono">{rep.totalLogs} entries</span>
-                </div>
-              </button>
-            ))
+            filtered.map((rep) => {
+              const isSelected = selectedReport?.id === rep.id;
+              return (
+                <button
+                  key={rep.id}
+                  onClick={() => setSelectedReport(rep)}
+                  className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 cursor-pointer relative overflow-hidden ${
+                    isSelected
+                      ? 'bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_16px_rgba(6,182,212,0.12)]'
+                      : 'bg-[#0d121c] border-slate-800/80 hover:border-slate-700 hover:bg-[#111724]'
+                  }`}
+                >
+                  {isSelected && (
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                  )}
+                  <div className="flex items-start justify-between gap-2">
+                    <h4 className="text-xs font-semibold text-slate-100 leading-snug truncate">{getReportTitle(rep)}</h4>
+                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wide shrink-0 border ${getSeverityBadgeClass(rep.severity)}`}>
+                      {rep.severity}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-1.5 truncate">
+                    File: <span className="font-mono text-[10px] text-cyan-400/90">{rep.filename}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-500 mt-3 pt-2 border-t border-white/[0.04]">
+                    <span className="flex items-center gap-1">
+                      <CalendarBlank className="h-3 w-3 text-slate-500" weight="duotone" />
+                      {new Date(rep.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                    </span>
+                    <span className="font-mono tabular-nums text-slate-400">{rep.totalLogs} events</span>
+                  </div>
+                </button>
+              );
+            })
           )}
         </div>
       </div>
@@ -212,112 +234,162 @@ export const ReportsPage: React.FC = () => {
       {/* Details Area */}
       <div className="lg:col-span-2">
         {selectedReport ? (
-          <div className="bg-[#12121a] border border-[#1e293b] rounded-xl p-6 shadow-xl space-y-6">
+          <GlowCard
+            glowColor="rgba(6,182,212,0.25)"
+            glowOpacity={0.5}
+            className="p-6 space-y-6 shadow-2xl bg-[#0b0f19]"
+          >
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#1e293b] pb-4 gap-4">
-              <div className="space-y-1.5">
-                <span className="text-[9px] font-mono text-cyan-400 font-bold tracking-widest uppercase">AI Incident Investigation</span>
-                <h3 className="text-base font-extrabold text-white leading-tight">{getReportTitle(selectedReport)}</h3>
-                <div className="flex flex-col md:flex-row md:items-start text-[10px] text-[#94a3b8] font-mono gap-1 md:gap-3">
-                  <span>Log File Source: {selectedReport.filename}</span>
-                  <span className="hidden md:inline">•</span>
-                  <span>Incident ID: #{selectedReport.id}</span>
-                  <span className="hidden md:inline">•</span>
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] text-slate-300 font-semibold uppercase tracking-wider bg-slate-800/80 border border-slate-700/60 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                    <Sparkle className="h-3 w-3 text-indigo-400" weight="fill" /> AI Incident RCA
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-500">#{selectedReport.id}</span>
+                </div>
+                <h3 className="text-lg font-bold text-white leading-tight">{getReportTitle(selectedReport)}</h3>
+                <div className="flex flex-wrap items-center text-[11px] text-slate-400 gap-x-3 gap-y-1">
+                  <span>Source: <strong className="font-mono text-slate-300 font-semibold">{selectedReport.filename}</strong></span>
+                  <span>•</span>
                   <span>{new Date(selectedReport.createdAt).toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 shrink-0">
                 <button
                   onClick={() => handleDownloadPdf(selectedReport)}
-                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-lg transition-all shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer flex items-center gap-1.5"
                 >
-                  <Download className="h-3.5 w-3.5" />
+                  <DownloadSimple className="h-4 w-4" weight="bold" />
                   Export PDF
                 </button>
                 <button
                   onClick={() => handleDelete(selectedReport.id)}
-                  className="border border-[#1e293b] hover:bg-red-950/20 text-red-400 hover:border-red-900/40 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                  className="border border-red-900/40 hover:bg-red-950/30 text-red-400 text-xs font-medium px-3 py-2 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  Delete
+                  <Trash className="h-4 w-4" weight="bold" />
                 </button>
               </div>
             </div>
 
             {/* Metrics Header row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0a0a0f] border border-[#1e293b]/60 rounded-xl p-4 font-mono text-xs">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-[#080c14] border border-slate-800/80 rounded-xl p-3.5 text-xs">
               <div className="space-y-1">
-                <span className="text-[#94a3b8] text-[10px]">Total Log Lines</span>
-                <p className="text-[#f1f5f9] font-bold text-sm">{selectedReport.totalLogs}</p>
+                <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Total Events</span>
+                <p className="text-slate-100 font-bold text-base font-mono tabular-nums">{selectedReport.totalLogs}</p>
               </div>
               <div className="space-y-1">
-                <span className="text-[#94a3b8] text-[10px]">Errors Count</span>
-                <p className="text-red-400 font-bold text-sm">{selectedReport.errorCount}</p>
+                <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Error Count</span>
+                <p className="text-red-400 font-bold text-base font-mono tabular-nums">{selectedReport.errorCount}</p>
               </div>
               <div className="space-y-1">
-                <span className="text-[#94a3b8] text-[10px]">Severity Class</span>
-                <span className={`mt-0.5 inline-block px-2 py-0.5 rounded border text-[10px] font-extrabold ${getSeverityBadgeClass(selectedReport.severity)}`}>
-                  {selectedReport.severity}
-                </span>
+                <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Severity Class</span>
+                <div>
+                  <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${getSeverityBadgeClass(selectedReport.severity)}`}>
+                    {selectedReport.severity}
+                  </span>
+                </div>
               </div>
               <div className="space-y-1">
-                <span className="text-[#94a3b8] text-[10px]">AI Confidence</span>
-                <span className={`mt-0.5 inline-block px-2 py-0.5 rounded border text-[10px] font-extrabold ${getConfidenceBadgeClass(selectedReport.confidence)}`}>
-                  {selectedReport.confidence}
-                </span>
+                <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Confidence</span>
+                <div>
+                  <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${getConfidenceBadgeClass(selectedReport.confidence)}`}>
+                    {selectedReport.confidence}
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Main Sections */}
-            <div className="space-y-5">
-              <div className="space-y-2">
-                <h4 className="text-xs uppercase font-bold tracking-wider text-cyan-400 font-mono flex items-center gap-1.5">
-                  <AlertOctagon className="h-4 w-4" />
-                  1. Root Cause Summary
-                </h4>
-                <p className="text-xs text-[#94a3b8] bg-[#1a1a2e]/40 border border-[#1e293b]/60 rounded-lg p-3.5 leading-relaxed font-mono whitespace-pre-line">
+            <div className="space-y-4">
+              {/* Section 1: Root Cause */}
+              <div className="space-y-2 bg-[#0d121f] border border-slate-800/80 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs uppercase font-bold tracking-wider text-cyan-400 flex items-center gap-2">
+                    <WarningOctagon className="h-4 w-4" weight="duotone" />
+                    1. Root Cause Analysis
+                  </h4>
+                  <button
+                    onClick={() => handleCopyText(selectedReport.rootCause, 'rootCause')}
+                    className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                  >
+                    {copiedSection === 'rootCause' ? <Check className="h-3 w-3 text-emerald-400" weight="bold" /> : <Copy className="h-3 w-3" weight="bold" />}
+                    {copiedSection === 'rootCause' ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
                   {selectedReport.rootCause}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-xs uppercase font-bold tracking-wider text-cyan-400 font-mono flex items-center gap-1.5">
-                  <AlertOctagon className="h-4 w-4" />
-                  2. Impact Severity & Vector
-                </h4>
-                <p className="text-xs text-[#94a3b8] bg-[#1a1a2e]/40 border border-[#1e293b]/60 rounded-lg p-3.5 leading-relaxed font-mono whitespace-pre-line">
+              {/* Section 2: Impact */}
+              <div className="space-y-2 bg-[#0d121f] border border-slate-800/80 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs uppercase font-bold tracking-wider text-amber-400 flex items-center gap-2">
+                    <Lightning className="h-4 w-4" weight="fill" />
+                    2. Blast Radius & Impact
+                  </h4>
+                  <button
+                    onClick={() => handleCopyText(selectedReport.impact, 'impact')}
+                    className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                  >
+                    {copiedSection === 'impact' ? <Check className="h-3 w-3 text-emerald-400" weight="bold" /> : <Copy className="h-3 w-3" weight="bold" />}
+                    {copiedSection === 'impact' ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
                   {selectedReport.impact}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-xs uppercase font-bold tracking-wider text-cyan-400 font-mono flex items-center gap-1.5">
-                  <CheckCircle className="h-4 w-4" />
-                  3. Recommended Mitigation Fix
-                </h4>
-                <p className="text-xs text-[#94a3b8] bg-[#1a1a2e]/40 border border-[#1e293b]/60 rounded-lg p-3.5 leading-relaxed font-mono whitespace-pre-line">
+              {/* Section 3: Recommended Fix */}
+              <div className="space-y-2 bg-[#0d121f] border border-slate-800/80 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs uppercase font-bold tracking-wider text-emerald-400 flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" weight="fill" />
+                    3. Recommended Remediation
+                  </h4>
+                  <button
+                    onClick={() => handleCopyText(selectedReport.recommendedFix, 'fix')}
+                    className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                  >
+                    {copiedSection === 'fix' ? <Check className="h-3 w-3 text-emerald-400" weight="bold" /> : <Copy className="h-3 w-3" weight="bold" />}
+                    {copiedSection === 'fix' ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
                   {selectedReport.recommendedFix}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-xs uppercase font-bold tracking-wider text-cyan-400 font-mono flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4" />
-                  4. Preventative Best Practices
-                </h4>
-                <p className="text-xs text-[#94a3b8] bg-[#1a1a2e]/40 border border-[#1e293b]/60 rounded-lg p-3.5 leading-relaxed font-mono whitespace-pre-line">
+              {/* Section 4: Best Practices */}
+              <div className="space-y-2 bg-[#0d121f] border border-slate-800/80 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs uppercase font-bold tracking-wider text-sky-400 flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4" weight="duotone" />
+                    4. Preventative Architecture
+                  </h4>
+                  <button
+                    onClick={() => handleCopyText(selectedReport.preventionSteps, 'prevention')}
+                    className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                  >
+                    {copiedSection === 'prevention' ? <Check className="h-3 w-3 text-emerald-400" weight="bold" /> : <Copy className="h-3 w-3" weight="bold" />}
+                    {copiedSection === 'prevention' ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
                   {selectedReport.preventionSteps}
                 </p>
               </div>
             </div>
-          </div>
+          </GlowCard>
         ) : (
-          <div className="bg-[#12121a] border border-[#1e293b] rounded-xl p-8 text-center flex flex-col items-center justify-center min-h-[400px]">
-            <FileText className="h-10 w-10 text-[#94a3b8]/40 mb-3" />
-            <h4 className="text-xs font-bold text-white">No Incident Selected</h4>
-            <p className="text-[10px] text-[#94a3b8] mt-1 max-w-xs">
-              Select an AI incident investigation report from the sidebar list to inspect the diagnostics summary.
+          <div className="bg-[#0e1320] border border-slate-800 rounded-xl p-12 text-center flex flex-col items-center justify-center min-h-[440px]">
+            <FileText className="h-12 w-12 text-slate-600 mb-3" weight="duotone" />
+            <h4 className="text-sm font-bold text-white">No Incident Selected</h4>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm">
+              Select an incident investigation from the left sidebar list to inspect the AI root cause, remediation steps, and export metrics.
             </p>
           </div>
         )}
@@ -325,4 +397,5 @@ export const ReportsPage: React.FC = () => {
     </div>
   );
 };
+
 export default ReportsPage;

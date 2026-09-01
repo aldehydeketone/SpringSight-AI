@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Clock, Terminal, ShieldAlert } from 'lucide-react';
+import { Clock, TerminalWindow, ShieldWarning } from '@phosphor-icons/react';
 import { ParseResponse, AnalysisResult } from '../../types';
 
 interface AnalysisPanelProps {
@@ -84,7 +84,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
       <div>
         {/* Header with active processing indicator */}
         <div className="flex items-center justify-between p-3.5 border-b border-cyan-500/[0.08]">
-          <div className="text-[11px] font-mono font-bold text-white/45 flex items-center gap-2 uppercase tracking-widest">
+          <div className="text-[11px] font-sans font-bold text-white/60 flex items-center gap-2 uppercase tracking-wider">
             {/* Active processing indicator */}
             {isRunning ? (
               <span className="relative w-3.5 h-3.5 flex items-center justify-center shrink-0">
@@ -142,7 +142,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
         >
           {status === 'idle' && (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-1.5 p-4 z-10 bg-black/10">
-              <Terminal className="h-5 w-5 text-cyan-500/20" />
+              <TerminalWindow className="h-5 w-5 text-cyan-500/20" weight="duotone" />
               <span className="text-[10px] text-zinc-500 leading-normal font-sans">
                 Waiting for active log ingestion stream.<br />Drop files to process diagnostics.
               </span>
@@ -183,7 +183,7 @@ export const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
 
           {isDone && renderedLogs.length === 0 && (
             <div className="flex flex-col items-center justify-center py-6 text-center text-[10px] font-mono text-emerald-400 gap-1.5">
-              <ShieldAlert className="h-4 w-4 text-emerald-400 animate-pulse" />
+              <ShieldWarning className="h-4 w-4 text-emerald-400 animate-pulse" weight="duotone" />
               <span>Parsing complete. No critical exceptions encountered.</span>
             </div>
           )}

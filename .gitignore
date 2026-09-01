@@ -48,3 +48,8 @@ logs/
 # Environment
 .env
 .env.*
+
+# Test results
+frontend/test-results/
+frontend/playwright-report/
+frontend/*-raw.txt

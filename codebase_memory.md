@@ -216,6 +216,10 @@ AnalysisReport persisted ➔ Returns Analysis DTO response ➔ UI renders detail
   * Brand styling must preserve exact **SpringSight** names.
   * Use vanilla CSS only where high-performance animations (e.g. success transition circles) are necessary.
 
+### 13.1 Technical Debt / Environment Setup
+* **Vite Version**: This project currently uses Vite 4 instead of Vite 6 due to local Windows Application Control policies blocking the native Rollup 4 Rust binary (`@rollup/rollup-win32-x64-msvc.node`). 
+* **Tailwind CSS**: Because Vite 4 does not support the `@tailwindcss/vite` plugin (which requires Vite 5+), Tailwind 4 is configured via `@tailwindcss/postcss` in `postcss.config.js` as a workaround. If the Windows policy is relaxed, upgrade to Vite 6 and switch back to the official Vite plugin for better build performance.
+
 ---
 
 ## 14. Useful File Map

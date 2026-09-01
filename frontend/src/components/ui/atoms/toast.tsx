@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { X, CheckCircle, WarningCircle } from '@phosphor-icons/react';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -26,7 +26,7 @@ interface ToastProps {
  * - Fixed position: bottom-4 right-4, z-50
  * - Auto-dismisses after 3000ms via useEffect
  * - Left accent: green-500 for success, red-500 for error
- * - Icon: CheckCircle2 | AlertCircle from lucide-react
+ * - Icon: CheckCircle | WarningCircle from @phosphor-icons/react
  */
 export const Toast: React.FC<ToastProps> = ({ message, type, onDismiss }) => {
   useEffect(() => {
@@ -48,8 +48,8 @@ export const Toast: React.FC<ToastProps> = ({ message, type, onDismiss }) => {
       {/* Icon */}
       <div className="mt-0.5 shrink-0">
         {isSuccess
-          ? <CheckCircle2 className="h-4 w-4 text-green-400" />
-          : <AlertCircle className="h-4 w-4 text-red-400" />
+          ? <CheckCircle className="h-4 w-4 text-green-400" weight="fill" />
+          : <WarningCircle className="h-4 w-4 text-red-400" weight="fill" />
         }
       </div>
 

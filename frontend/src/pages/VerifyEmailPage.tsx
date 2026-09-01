@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { AuthService } from '../services/auth.service';
-import { BackgroundEffect } from '../components/ui/background-effect';
-import { SpringSightLogo } from '../components/ui/springsight-logo';
+import { AuthLayout } from '../components/ui/auth-layout';
+import { Button } from '@/components/ui/button';
 
 export const VerifyEmailPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -32,44 +32,35 @@ export const VerifyEmailPage: React.FC = () => {
   }, [token]);
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-16 font-sans">
-      <BackgroundEffect />
+    <AuthLayout>
+      <div className="text-center py-4">
+        <div
+          className={`mx-auto mb-5 h-3.5 w-3.5 rounded-full ${
+            status === 'loading'
+              ? 'animate-pulse bg-zinc-400'
+              : status === 'success'
+                ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.5)]'
+                : 'bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.5)]'
+          }`}
+        />
+        <h1 className="text-2xl font-bold tracking-tight text-white mb-2">{message}</h1>
+        <p className="text-sm sm:text-base text-white/60 font-normal tracking-wide max-w-sm mx-auto">
+          {status === 'success'
+            ? 'Your SpringSight account is ready. You can sign in now.'
+            : status === 'error'
+              ? 'Request a new verification email by registering again or contact support.'
+              : 'This should only take a moment.'}
+        </p>
 
-      <div className="relative z-10 w-full max-w-[420px]">
-        <div className="mb-7 flex w-full justify-center">
-          <SpringSightLogo />
-        </div>
-
-        <div className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] p-8 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-          <div
-            className={`mx-auto mb-5 h-3 w-3 rounded-full ${
-              status === 'loading'
-                ? 'animate-pulse bg-zinc-400'
-                : status === 'success'
-                  ? 'bg-emerald-400'
-                  : 'bg-red-400'
-            }`}
-          />
-          <h1 className="text-2xl font-semibold tracking-tight text-white">{message}</h1>
-          <p className="mt-2 text-sm text-zinc-400">
-            {status === 'success'
-              ? 'Your SpringSight account is ready. You can sign in now.'
-              : status === 'error'
-                ? 'Request a new verification email by registering again or contact support.'
-                : 'This should only take a moment.'}
-          </p>
-
-          {status !== 'loading' && (
-            <Link
-              to="/"
-              className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-white px-4 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100"
-            >
-              Back to sign in
-            </Link>
-          )}
-        </div>
+        {status !== 'loading' && (
+          <div className="mt-8">
+            <Button asChild className="h-12 px-6 bg-white text-black hover:bg-zinc-200 rounded-xl text-base font-semibold transition-all">
+              <Link to="/">Back to sign in</Link>
+            </Button>
+          </div>
+        )}
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 

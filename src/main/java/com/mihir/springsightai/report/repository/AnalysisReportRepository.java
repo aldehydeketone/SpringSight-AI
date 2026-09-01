@@ -7,9 +7,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface AnalysisReportRepository extends JpaRepository<AnalysisReport, Long> {
 
     List<AnalysisReport> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+
+    Optional<AnalysisReport> findFirstByUserIdAndLogFileIdOrderByCreatedAtDesc(Long userId, Long logFileId);
+
+    Optional<AnalysisReport> findFirstByUserIdAndFilenameOrderByCreatedAtDesc(Long userId, String filename);
 
     long countByUserId(Long userId);
 

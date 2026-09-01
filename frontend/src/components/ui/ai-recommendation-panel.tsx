@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Brain, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Brain, ArrowRight, CheckCircle } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { Report } from '../../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -184,18 +184,7 @@ const BrainIcon: React.FC<{ triggerKey: string }> = ({ triggerKey }) => {
   };
 
   return (
-    <div
-      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-      style={{
-        background:
-          'radial-gradient(circle at 35% 35%, rgba(0,200,255,0.65) 0%, rgba(0,100,200,0.22) 100%)',
-        boxShadow: glowByPhase[glowPhase],
-        border: '1px solid rgba(0,200,255,0.3)',
-        transition: 'box-shadow 700ms ease-out',
-      }}
-    >
-      <Brain className="w-4 h-4 text-white opacity-95" />
-    </div>
+    <Brain className="w-7 h-7 text-cyan-400 shrink-0" weight="duotone" />
   );
 };
 
@@ -391,7 +380,7 @@ export const AiRecommendationPanel: React.FC<AiRecommendationPanelProps> = ({ re
               <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2.5">Root Cause</p>
               <p
                 ref={rootCauseRef}
-                className="text-[11px] text-slate-300 leading-relaxed break-words font-mono line-clamp-4"
+                className="text-[11px] text-slate-200 leading-relaxed break-words font-sans font-medium line-clamp-4"
                 style={{
                   background: 'rgba(0,0,0,0.3)',
                   padding: '10px 12px',
@@ -478,7 +467,7 @@ export const AiRecommendationPanel: React.FC<AiRecommendationPanelProps> = ({ re
                           border: '1px solid rgba(34,197,94,0.4)',
                         }}
                       >
-                        <CheckCircle2 className="w-2.5 h-2.5 text-white opacity-90" />
+                        <CheckCircle className="w-3 h-3 text-white opacity-90" weight="fill" />
                       </div>
                       <span
                         className="text-[11px] text-slate-300 leading-[1.5] min-w-0 flex-1 truncate"

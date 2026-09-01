@@ -8,6 +8,7 @@ import com.mihir.springsightai.log.repository.LogFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class LogFileService {
      * @throws IOException if writing to disk fails
      */
     @Transactional
+    @CacheEvict(value = "dashboardSummary", key = "#root.target.getCurrentUserId()")
     public LogFileResponse uploadLogFile(MultipartFile file) throws IOException {
 
         // 1. Validate that the file is not empty
@@ -112,6 +114,10 @@ public class LogFileService {
             return "";
         }
         return filename.substring(filename.lastIndexOf('.'));
+    }
+
+    public Long getCurrentUserId() {
+        return getAuthenticatedUserId();
     }
 
     /**

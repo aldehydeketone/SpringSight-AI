@@ -1,8 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Upload, CloudUpload, Terminal, Cpu, FileCode, ShieldAlert, Activity, ArrowRight, Zap, CheckCircle2, FolderOpen,
-} from 'lucide-react';
+  UploadSimple,
+  CloudArrowUp,
+  TerminalWindow,
+  Cpu,
+  FileCode,
+  ShieldWarning,
+  Pulse,
+  ArrowRight,
+  Lightning,
+  CheckCircle,
+  FolderOpen,
+} from '@phosphor-icons/react';
 import { ShinyText } from './shiny-text';
 
 interface UploadHeroCardProps {
@@ -11,20 +21,20 @@ interface UploadHeroCardProps {
 }
 
 const WORKFLOW_STEPS = [
-  { icon: Upload,      label: 'Ingest',  sub: 'Drop or upload', color: 'blue' },
-  { icon: FileCode,    label: 'Parse',   sub: 'Extract entries', color: 'purple' },
-  { icon: ShieldAlert, label: 'Detect',  sub: 'Find anomalies', color: 'amber' },
-  { icon: Cpu,         label: 'Analyze', sub: 'AI root cause', color: 'cyan' },
-  { icon: Activity,    label: 'Report',  sub: 'Export insights', color: 'green' },
+  { icon: UploadSimple,    label: 'Ingest',  sub: 'Drop or upload', color: 'blue' },
+  { icon: FileCode,        label: 'Parse',   sub: 'Extract entries', color: 'purple' },
+  { icon: ShieldWarning,   label: 'Detect',  sub: 'Find anomalies', color: 'amber' },
+  { icon: Cpu,             label: 'Analyze', sub: 'AI root cause', color: 'cyan' },
+  { icon: Pulse,           label: 'Report',  sub: 'Export insights', color: 'green' },
 ];
 
 const CAPABILITIES = [
   { icon: FileCode, text: 'Spring Boot Stack Traces', color: 'blue' },
   { icon: Cpu, text: 'Root Cause Analysis', color: 'purple' },
-  { icon: CheckCircle2, text: 'AI Recommendations', color: 'cyan' },
-  { icon: ShieldAlert, text: 'Security Log Detection', color: 'amber' },
-  { icon: Activity, text: 'Multi-format Logs', color: 'purple' },
-  { icon: Terminal, text: 'PDF Report Export', color: 'blue' },
+  { icon: CheckCircle, text: 'AI Recommendations', color: 'cyan' },
+  { icon: ShieldWarning, text: 'Security Log Detection', color: 'amber' },
+  { icon: Pulse, text: 'Multi-format Logs', color: 'purple' },
+  { icon: TerminalWindow, text: 'PDF Report Export', color: 'blue' },
 ];
 
 const getColorConfig = (color: string) => {
@@ -63,14 +73,14 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
   const openUploadWorkspace = () => navigate('/upload');
 
   return (
-    <div className="relative bg-[#060913] rounded-2xl border border-cyan-500/20 overflow-hidden shadow-[0_0_40px_rgba(6,182,212,0.06)] flex flex-col h-full">
+    <div className="relative bg-[#0b0f19] rounded-2xl border border-slate-800 overflow-hidden shadow-xl flex flex-col h-full">
 
-      {/* Ambient glow */}
+      {/* Ambient top gradient glow */}
       <div
-        className="absolute top-0 left-0 right-0 h-28 pointer-events-none z-0"
+        className="absolute top-0 left-0 right-0 h-36 pointer-events-none z-0"
         style={{
           backgroundImage:
-            'radial-gradient(ellipse at 50% 0%, rgba(6,182,212,0.15) 0%, rgba(59,130,246,0.05) 50%, transparent 75%)',
+            'radial-gradient(ellipse at 50% -10%, rgba(99,102,241,0.16) 0%, rgba(59,130,246,0.06) 50%, transparent 80%)',
         }}
       />
 
@@ -85,7 +95,7 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
 
         {/* Workspace title */}
         <div className="flex items-center gap-1.5 ml-1">
-          <FolderOpen className="h-3 w-3 text-slate-500" strokeWidth={1.5} />
+          <FolderOpen className="h-3.5 w-3.5 text-slate-500" weight="duotone" />
           <span className="text-[10.5px] font-medium text-slate-400 tracking-[0.02em] select-none">
             Upload Workspace
           </span>
@@ -94,7 +104,7 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
         {/* Status badge */}
         <div className="ml-auto flex items-center gap-2 bg-white/[0.04] border border-white/[0.07] px-2.5 py-[3px] rounded-full">
           <span
-            className="w-[5px] h-[5px] rounded-full bg-cyan-400 shrink-0"
+            className="w-[5px] h-[5px] rounded-full bg-emerald-400 shrink-0"
             style={{ animation: 'diag-dot-breathe 2.8s ease-in-out infinite' }}
           />
           <span className="text-[9px] font-medium tracking-[0.07em] text-slate-300">System Ready</span>
@@ -112,59 +122,26 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
           onClick={() => fileInputRef.current?.click()}
           className={`relative flex flex-col items-center justify-center rounded-xl border border-dashed transition-all duration-300 cursor-pointer group overflow-hidden select-none py-4 ${
             dragOver
-              ? 'border-cyan-400 bg-gradient-to-b from-cyan-500/[0.1] to-cyan-500/[0.05] shadow-[0_0_30px_rgba(6,182,212,0.25)]'
-              : 'border-cyan-500/40 bg-white/[0.01] hover:border-cyan-400/60 hover:bg-gradient-to-b hover:from-cyan-950/[0.1] hover:to-transparent hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]'
+              ? 'border-indigo-400 bg-gradient-to-b from-indigo-500/[0.1] to-indigo-500/[0.05] shadow-[0_0_30px_rgba(99,102,241,0.25)]'
+              : 'border-slate-700/80 bg-white/[0.01] hover:border-slate-600 hover:bg-white/[0.02] hover:shadow-[0_0_20px_rgba(255,255,255,0.02)]'
           }`}
         >
           {/* Subtle radial glow behind drop zone */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.05)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)] pointer-events-none" />
 
-          {/* Scanner sweep (only visible on drag over) */}
-          {dragOver && (
-            <div
-              className="absolute left-0 right-0 h-px pointer-events-none z-0"
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(6,182,212,0.8), transparent)',
-                animation: 'scanline-anim 2.5s linear infinite',
-              }}
-            />
-          )}
-          {/* Grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.025] pointer-events-none"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(6,182,212,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.6) 1px, transparent 1px)',
-              backgroundSize: '28px 28px',
-            }}
+          {/* Upload icon - Clean without circular box */}
+          <CloudArrowUp
+            className={`h-10 w-10 mb-2 transition-all duration-300 ${
+              dragOver ? 'text-indigo-300 scale-110' : 'text-slate-400 group-hover:text-slate-200 group-hover:scale-105'
+            }`}
+            weight="duotone"
           />
 
-          {/* Upload icon */}
-          <div
-            className={`relative w-11 h-11 rounded-full flex items-center justify-center mb-2 transition-all duration-300 ${
-              dragOver
-                ? 'bg-cyan-500/20 border border-cyan-400/50 scale-110 shadow-[0_0_25px_rgba(6,182,212,0.4)]'
-                : 'bg-cyan-500/10 border border-cyan-500/30 group-hover:scale-105 group-hover:border-cyan-400/50 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-            }`}
-          >
-            <CloudUpload className={`h-5 w-5 transition-colors duration-200 ${dragOver ? 'text-cyan-300' : 'text-cyan-400'}`} />
-            <div className="absolute inset-0 rounded-full bg-cyan-500/10 opacity-40 animate-pulse pointer-events-none" />
-          </div>
-
-          <p className={`text-sm font-semibold tracking-wide transition-colors duration-200 ${dragOver ? 'text-cyan-300' : 'text-white/80'}`}>
+          <p className={`text-sm font-semibold tracking-wide transition-colors duration-200 ${dragOver ? 'text-indigo-300' : 'text-white/80'}`}>
             {dragOver ? 'Release to open Upload Workspace' : 'Drop log files here'}
           </p>
-          <p className="text-[10px] text-zinc-500 font-mono mt-1">drag · click · or browse</p>
-
-          {/* Format tags */}
-          <div className="flex gap-1.5 mt-3 items-center">
-            {['.log', '.txt'].map((fmt) => (
-              <span key={fmt} className="font-mono text-[9px] px-2 py-0.5 rounded bg-cyan-950/30 text-cyan-400/80 border border-cyan-500/20">
-                {fmt}
-              </span>
-            ))}
-            <span className="font-mono text-[9px] px-1.5 py-0.5 text-zinc-600">· max 50 MB</span>
-          </div>
+          <p className="text-[11px] text-slate-400 font-sans mt-1">drag · click · or browse</p>
+          <p className="text-[10px] text-slate-500 font-mono mt-2">.log · .txt (max 50 MB)</p>
 
           <input ref={fileInputRef} type="file" accept=".log,.txt" className="hidden" onChange={handleFileChange} />
         </div>
@@ -173,32 +150,32 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={openUploadWorkspace}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-600 text-white text-[11px] font-bold px-4 py-2.5 rounded-[var(--radius-btn)] transition-all duration-300 shadow-[var(--shadow-elevation)] hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:scale-[1.02] cursor-pointer will-change-transform"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-[11px] font-bold px-4 py-2.5 rounded-lg transition-all duration-200 shadow-md cursor-pointer"
           >
-            <CloudUpload className="h-3.5 w-3.5" />
+            <CloudArrowUp className="h-4 w-4" weight="bold" />
             Open Upload Workspace
-            <ArrowRight className="h-3.5 w-3.5 ml-0.5 opacity-70" />
+            <ArrowRight className="h-3.5 w-3.5 ml-0.5 opacity-70" weight="bold" />
           </button>
           <button
             onClick={onAnalyzeSample}
             disabled={sampleLoading}
-            className="flex items-center gap-1.5 bg-white/[0.03] border border-cyan-500/25 hover:border-cyan-400/50 hover:bg-cyan-950/20 text-cyan-400 text-[11px] font-semibold px-3.5 py-2.5 rounded-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+            className="flex items-center gap-1.5 bg-slate-800/60 border border-slate-700/60 hover:border-slate-500 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-semibold px-3.5 py-2.5 rounded-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           >
-            <Terminal className="h-3.5 w-3.5" />
+            <TerminalWindow className="h-4 w-4 text-slate-400" weight="duotone" />
             {sampleLoading ? 'Analyzing…' : 'Try Sample'}
           </button>
         </div>
 
         {/* Bottom two-col: workflow + capabilities */}
-        <div className="flex-1 grid grid-cols-5 gap-4 border-t border-white/[0.04] pt-3 min-h-0 px-2">
+        <div className="flex-1 grid grid-cols-5 gap-4 border-t border-slate-800/80 pt-3 min-h-0 px-2">
 
           {/* AI Workflow strip — 3 cols */}
           <div className="col-span-3 flex flex-col min-h-0 relative">
             <p className="text-[10px] font-medium text-slate-400 uppercase tracking-[0.12em] mb-2 shrink-0">AI Workflow</p>
             <div className="flex items-start justify-between flex-1 relative mt-1">
               
-              {/* Connector lines: absolutely positioned at icon center (top-[20px] = half of 40px icon) */}
-              <div className="absolute top-[20px] left-[20px] right-[20px] h-[2px] flex z-0">
+              {/* Connector lines: absolutely positioned at icon center */}
+              <div className="absolute top-[12px] left-[16px] right-[16px] h-[2px] flex z-0">
                 {WORKFLOW_STEPS.map((step, idx) => {
                   if (idx === WORKFLOW_STEPS.length - 1) return null;
                   const nextConfig = getColorConfig(WORKFLOW_STEPS[idx + 1].color);
@@ -211,16 +188,10 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
                       <div
                         className="w-full h-full rounded-full transition-opacity duration-500"
                         style={{
-                          background: `linear-gradient(90deg, ${stepConfig.hex}CC, ${nextConfig.hex}CC)`,
-                          opacity: isActive || isCompleted ? 1 : 0.5,
+                          background: `linear-gradient(90deg, ${stepConfig.hex}88, ${nextConfig.hex}88)`,
+                          opacity: isActive || isCompleted ? 1 : 0.4,
                         }}
                       />
-                      {isActive && (
-                        <div
-                          className="absolute top-0 left-0 h-full w-10 bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)] rounded-full"
-                          style={{ animation: 'travel-pulse 1.5s ease-out infinite' }}
-                        />
-                      )}
                     </div>
                   );
                 })}
@@ -235,27 +206,20 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
                 return (
                   <React.Fragment key={step.label}>
                     <div className="flex flex-col items-center z-10 group/step relative">
-                      {/* Icon Container: 40×40 so top-[20px] connector hits exact centre */}
-                      <div
-                        className="w-10 h-10 rounded-[12px] flex items-center justify-center transition-all duration-300 relative group-hover/step:-translate-y-px"
-                        style={{
-                          background: `radial-gradient(circle at 40% 40%, ${stepConfig.bg} 0%, rgba(8,12,22,0.7) 80%)`,
-                          border: `1px solid ${stepConfig.border}`,
-                          boxShadow: isActive || isCompleted
-                            ? `0 0 18px ${stepConfig.glow}, 0 0 6px ${stepConfig.glow}`
-                            : `0 0 10px ${stepConfig.glow}60, inset 0 1px 0 rgba(255,255,255,0.06)`,
-                          opacity: isActive || isCompleted ? 1 : 0.7,
-                        }}
-                      >
-                        <Icon className={`h-4 w-4 ${stepConfig.text} transition-all duration-300 ${isActive || isCompleted ? 'opacity-100' : 'opacity-75 group-hover/step:opacity-100'}`} />
-                      </div>
+                      {/* Clean Icon without box wrapper */}
+                      <Icon
+                        className={`h-6 w-6 ${stepConfig.text} transition-all duration-300 ${
+                          isActive || isCompleted ? 'opacity-100 drop-shadow-[0_0_8px_currentColor]' : 'opacity-85 group-hover/step:opacity-100 group-hover/step:scale-110'
+                        }`}
+                        weight="duotone"
+                      />
                       
                       {/* Labels */}
                       <div className="flex flex-col items-center mt-2 gap-[2px]">
                         <span className={`text-[10px] font-medium tracking-wide transition-colors duration-200 ${isActive || isCompleted ? 'text-slate-200' : 'text-slate-400'}`}>
                           {step.label}
                         </span>
-                        <span className="text-[9px] text-slate-600 leading-none whitespace-nowrap">
+                        <span className="text-[9px] text-slate-500 leading-none whitespace-nowrap">
                           {step.sub}
                         </span>
                       </div>
@@ -265,9 +229,9 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
               })}
             </div>
 
-            {/* Gemini credibility marker — aligned to Ingest icon left edge */}
-            <div className="flex items-baseline mt-5 opacity-75 hover:opacity-100 transition-opacity duration-300">
-              <Zap className="h-3 w-3 text-cyan-500/70 shrink-0 translate-y-[0.5px] mr-[6px]" />
+            {/* Gemini credibility marker */}
+            <div className="flex items-baseline mt-4 opacity-80 hover:opacity-100 transition-opacity duration-300">
+              <Lightning className="h-3.5 w-3.5 text-indigo-400 shrink-0 translate-y-[0.5px] mr-[6px]" weight="fill" />
               <span className="text-[9.5px] font-medium text-slate-500 tracking-wide mr-[9px]">Powered by</span>
               <ShinyText
                 text="Gemini 2.5 Flash"
@@ -284,7 +248,7 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
           </div>
 
           {/* Capabilities — 2 cols */}
-          <div className="col-span-2 flex flex-col min-h-0 pl-2 border-l border-white/[0.04]">
+          <div className="col-span-2 flex flex-col min-h-0 pl-2 border-l border-slate-800/80">
             <p className="text-[10px] font-medium text-slate-400 uppercase tracking-[0.12em] mb-2 shrink-0">Capabilities</p>
             
             <div className="grid grid-cols-2 gap-1.5 flex-1 place-content-start">
@@ -293,39 +257,18 @@ export const UploadHeroCard: React.FC<UploadHeroCardProps> = ({
                 return (
                   <div
                     key={text}
-                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-all duration-200 hover:bg-white/[0.03] hover:-translate-y-[1px] group/cap cursor-default"
-                    style={{ background: 'rgba(255,255,255,0.015)' }}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all duration-200 hover:bg-white/[0.03] group/cap cursor-default"
                   >
-                    <div
-                      className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all duration-200"
-                      style={{
-                        background: `radial-gradient(circle at top left, ${capConfig.bg}, transparent)`,
-                        border: `1px solid ${capConfig.border}`,
-                      }}
-                    >
-                      <Icon className={`h-3 w-3 ${capConfig.text} opacity-80 group-hover/cap:opacity-100 transition-opacity`} />
-                    </div>
+                    <Icon
+                      className={`h-4 w-4 ${capConfig.text} shrink-0 opacity-80 group-hover/cap:opacity-100 transition-all group-hover/cap:scale-105`}
+                      weight="duotone"
+                    />
                     <span className="text-[9px] font-medium text-slate-400 group-hover/cap:text-slate-300 transition-colors leading-tight">{text}</span>
                   </div>
                 );
               })}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom diagnostic strip */}
-      <div className="border-t border-white/[0.04] px-4 py-1.5 bg-black/40 relative z-10 shrink-0">
-        <div className="flex items-center justify-between font-mono text-[8px] tracking-[0.08em]">
-          <span className="flex items-center gap-1.5 text-slate-300">
-            <span
-              className="h-1.5 w-1.5 rounded-full bg-emerald-400"
-              style={{ animation: 'diag-dot-breathe 2.8s ease-in-out infinite' }}
-            />
-            DIAGNOSTIC ENGINE: ONLINE
-          </span>
-          <span className="text-slate-500">AI ENGINE: GEMINI 2.5 FLASH</span>
-          <span className="text-slate-600">PARSER CAP: 50MB</span>
         </div>
       </div>
     </div>

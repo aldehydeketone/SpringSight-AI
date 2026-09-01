@@ -2,8 +2,7 @@ package com.mihir.springsightai.ai.controller;
 
 import com.mihir.springsightai.ai.dto.AiAnalysisRequest;
 import com.mihir.springsightai.ai.dto.AiAnalysisResponse;
-import com.mihir.springsightai.ai.service.GeminiService;
-import com.mihir.springsightai.report.service.AnalysisReportService;
+import com.mihir.springsightai.ai.service.AiOrchestrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "AI Root Cause Analysis", description = "Gemini-powered root cause analysis and report persistence")
 public class AiController {
 
-    private final GeminiService geminiService;
-    private final AnalysisReportService analysisReportService;
+    private final AiOrchestrationService aiOrchestrationService;
 
     /**
      * Performs AI Root Cause Analysis on summarized log data.
@@ -43,8 +41,7 @@ public class AiController {
     public ResponseEntity<AiAnalysisResponse> analyzeRootCause(@Valid @RequestBody AiAnalysisRequest request) {
         log.info("[AiController] Root cause analysis requested for file: {}", request.getFilename());
 
-        AiAnalysisResponse response = geminiService.generateRootCauseAnalysis(request);
-        analysisReportService.saveReport(request, response);
+        AiAnalysisResponse response = aiOrchestrationService.processRootCauseAnalysis(request);
 
         log.info("[AiController] Root cause analysis completed. Severity: {}, Confidence: {}",
                 response.getSeverity(), response.getConfidence());

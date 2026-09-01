@@ -10,6 +10,8 @@ import com.mihir.springsightai.report.dto.DashboardSummaryResponse;
 import com.mihir.springsightai.report.entity.AnalysisReport;
 import com.mihir.springsightai.report.repository.AnalysisReportRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class AnalysisReportService {
     private final AnalysisReportRepository analysisReportRepository;
 
     @Transactional
+    @CacheEvict(value = "dashboardSummary", key = "#root.target.getCurrentUserId()")
     public AnalysisReportResponse saveReport(AiAnalysisRequest request, AiAnalysisResponse aiResponse) {
         User user = getAuthenticatedUser();
 
@@ -40,6 +43,7 @@ public class AnalysisReportService {
                 .recommendedFix(aiResponse.getRecommendedFix())
                 .preventionSteps(aiResponse.getPreventionSteps())
                 .confidence(normalize(aiResponse.getConfidence()))
+                .logFileId(request.getLogFileId())
                 .user(user)
                 .build();
 
@@ -61,11 +65,13 @@ public class AnalysisReportService {
     }
 
     @Transactional
+    @CacheEvict(value = "dashboardSummary", key = "#root.target.getCurrentUserId()")
     public void deleteReport(Long reportId) {
         analysisReportRepository.delete(getOwnedReport(reportId));
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "dashboardSummary", key = "#root.target.getCurrentUserId()")
     public DashboardSummaryResponse getDashboardSummary() {
         Long userId = getAuthenticatedUser().getId();
         return DashboardSummaryResponse.builder()
@@ -86,6 +92,10 @@ public class AnalysisReportService {
             throw new UnauthorizedReportAccessException(reportId);
         }
         return report;
+    }
+
+    public Long getCurrentUserId() {
+        return getAuthenticatedUser().getId();
     }
 
     private User getAuthenticatedUser() {

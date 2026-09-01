@@ -7,12 +7,20 @@ import { AreaChart } from '../components/ui/area-chart';
 import { KineticLogStream } from '../components/ui/kinetic-log-stream';
 import { UploadHeroCard } from '../components/ui/upload-hero-card';
 import {
-  AlertOctagon, AlertTriangle, Info, Layers, Download,
-  Trash2, Eye, Upload, Cpu,
-} from 'lucide-react';
+  WarningOctagon,
+  Warning,
+  Info,
+  Stack,
+  DownloadSimple,
+  Trash,
+  Eye,
+  UploadSimple,
+  Cpu,
+} from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { AiRecommendationPanel } from '../components/ui/ai-recommendation-panel';
 import { useToast, ToastContainer } from '../components/ui/atoms/toast';
+import { GlowCard } from '../components/ui/glow-card';
 
 // ── Compact KPI Card ──────────────────────────────────────────────────────────
 interface KpiCardProps {
@@ -82,36 +90,25 @@ const KpiCard: React.FC<KpiCardProps> = ({ label, value, icon: Icon, accent, sub
   const lastPt = sparkPoints[sparkPoints.length - 1];
 
   return (
-    <div
-      className="relative rounded-xl p-6 transition-all duration-200 ease-out cursor-default group min-w-0 flex flex-col overflow-hidden will-change-transform hover:-translate-y-[2px]"
+    <GlowCard
+      glowColor={accent}
+      glowOpacity={0.4}
+      className="p-6 transition-all duration-200 ease-out cursor-default min-w-0 flex flex-col will-change-transform hover:-translate-y-[2px]"
       style={{
         background: 'linear-gradient(145deg, #0f1420, #0a0e17)',
-        border: '1px solid rgba(100,116,139,0.2)',
-        boxShadow: '0 2px 12px -2px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)',
         minHeight: '215px',
       }}
-      // Hover accent via inline CSS custom properties via onMouseEnter/Leave is fragile;
-      // use CSS group-hover instead via a pseudo element:
     >
-      {/* Hover border overlay — transitions accent color in on hover */}
-      <div
-        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-        style={{ border: `1px solid ${accent}40`, boxShadow: `0 4px 24px -4px ${accent}30` }}
-      />
-
-      {/* Icon */}
-      <div className="mb-5 relative z-10">
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:shadow-[0_0_18px_2px_var(--icon-glow)]"
+      {/* Naked Glowing Icon (No Box) */}
+      <div className="mb-4 relative z-10 flex items-center">
+        <Icon
+          className="h-8 w-8 shrink-0 transition-transform duration-300 group-hover:scale-110"
           style={{
-            background: `radial-gradient(circle at 35% 35%, ${accent}b0 0%, ${accent}30 100%)`,
-            boxShadow: `0 0 10px 1px ${accent}45, inset 0 1px 3px rgba(255,255,255,0.15)`,
-            border: `1px solid ${accent}50`,
-            ['--icon-glow' as any]: `${accent}55`,
+            color: accent,
+            filter: `drop-shadow(0 0 8px ${accent}bb) drop-shadow(0 0 16px ${accent}55)`,
           }}
-        >
-          <Icon className="h-5 w-5 text-white opacity-95" />
-        </div>
+          weight="duotone"
+        />
       </div>
 
       {/* Metric + text */}
@@ -171,7 +168,7 @@ const KpiCard: React.FC<KpiCardProps> = ({ label, value, icon: Icon, accent, sub
           />
         </svg>
       </div>
-    </div>
+    </GlowCard>
   );
 };
 
@@ -188,28 +185,32 @@ const SeverityDistribution: React.FC<SeverityProps> = ({ dashboard }) => {
   const lowPct  = Math.max(0, 100 - critPct - highPct - medPct);
 
   const bars = [
-    { label: 'Critical', count: dashboard.criticalReports, pct: critPct, color: '#ef4444', bg: 'bg-red-500/10 border-red-500/20' },
-    { label: 'High',     count: dashboard.highReports,     pct: highPct, color: '#f97316', bg: 'bg-orange-500/10 border-orange-500/20' },
-    { label: 'Medium',   count: dashboard.mediumReports,   pct: medPct,  color: '#f59e0b', bg: 'bg-amber-500/10 border-amber-500/20' },
-    { label: 'Low',      count: dashboard.lowReports,      pct: lowPct,  color: '#3b82f6', bg: 'bg-blue-500/10 border-blue-500/20' },
+    { label: 'Critical', count: dashboard.criticalReports, pct: critPct, color: '#ef4444', bg: 'bg-red-500/10 border-red-500/25 text-red-400' },
+    { label: 'High',     count: dashboard.highReports,     pct: highPct, color: '#f97316', bg: 'bg-orange-500/10 border-orange-500/25 text-orange-400' },
+    { label: 'Medium',   count: dashboard.mediumReports,   pct: medPct,  color: '#f59e0b', bg: 'bg-amber-500/10 border-amber-500/25 text-amber-400' },
+    { label: 'Low',      count: dashboard.lowReports,      pct: lowPct,  color: '#38bdf8', bg: 'bg-sky-500/10 border-sky-500/25 text-sky-400' },
   ];
 
   return (
-    <div className="bg-[#0d1117] border border-[#1e293b] rounded-xl p-4 shadow-sm w-full">
-      <div className="flex items-center justify-between gap-2 mb-3">
+    <GlowCard
+      glowColor="rgba(6,182,212,0.2)"
+      glowOpacity={0.4}
+      className="p-5 w-full bg-[#0b0f19] border border-slate-800 shadow-md"
+    >
+      <div className="flex items-center justify-between gap-2 mb-3.5">
         <div className="min-w-0">
-          <h3 className="text-xs font-semibold text-[#f1f5f9] uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">
             Severity Distribution
           </h3>
-          <p className="text-[10px] text-[#475569] mt-0.5">By incident class</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">Categorized by incident vector</p>
         </div>
-        <span className="text-[10px] font-medium text-slate-500 whitespace-nowrap">
-          {dashboard.totalReports} Reports
+        <span className="text-[11px] font-semibold text-cyan-400 bg-cyan-950/40 border border-cyan-500/30 px-2.5 py-1 rounded-md whitespace-nowrap">
+          {dashboard.totalReports} Total Reports
         </span>
       </div>
 
       {/* Stacked bar */}
-      <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-[#0d1520] mb-4">
+      <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-900 mb-4 border border-slate-800">
         {dashboard.totalReports > 0 && bars.map((b) =>
           b.count > 0 ? (
             <div
@@ -223,21 +224,21 @@ const SeverityDistribution: React.FC<SeverityProps> = ({ dashboard }) => {
       </div>
 
       {/* Legend cards - Horizontal Row */}
-      <div className="flex items-center gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {bars.map((b) => (
           <div
             key={b.label}
-            className={`flex flex-1 items-center justify-between rounded-lg border px-3 py-2 ${b.bg}`}
+            className={`flex items-center justify-between rounded-lg border px-3 py-2 ${b.bg}`}
           >
             <div className="flex items-center gap-2 min-w-0">
               <div className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
-              <span className="text-[10px] text-[#94a3b8] font-medium truncate">{b.label}</span>
+              <span className="text-[11px] font-semibold truncate">{b.label}</span>
             </div>
-            <span className="text-sm font-extrabold font-mono shrink-0" style={{ color: b.color }}>{b.count}</span>
+            <span className="text-sm font-bold font-mono shrink-0 tabular-nums">{b.count}</span>
           </div>
         ))}
       </div>
-    </div>
+    </GlowCard>
   );
 };
 
@@ -266,12 +267,16 @@ const AnalysisHistoryTable: React.FC<HistoryTableProps> = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="bg-[#0d1117] border border-[#1e293b] rounded-xl overflow-hidden shadow-sm">
-      <div className="px-5 py-3.5 border-b border-[#1e293b] flex items-center justify-between">
-        <h3 className="text-xs font-semibold text-[#f1f5f9] uppercase tracking-wider">Analysis History</h3>
+    <GlowCard
+      glowColor="rgba(6,182,212,0.15)"
+      glowOpacity={0.35}
+      className="bg-[#0b0f19] border border-slate-800 rounded-xl overflow-hidden shadow-md"
+    >
+      <div className="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between">
+        <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">Analysis History</h3>
         <button
           onClick={() => navigate('/reports')}
-          className="text-[10px] text-cyan-400 font-bold hover:text-cyan-300 transition-colors cursor-pointer shrink-0"
+          className="text-[11px] text-cyan-400 font-bold hover:text-cyan-300 transition-colors cursor-pointer shrink-0"
         >
           View All →
         </button>
@@ -323,21 +328,21 @@ const AnalysisHistoryTable: React.FC<HistoryTableProps> = ({
                       className="p-1.5 text-cyan-400 hover:bg-[#1e293b] rounded transition-colors cursor-pointer"
                       title="View"
                     >
-                      <Eye className="h-3.5 w-3.5" />
+                      <Eye className="h-4 w-4" weight="bold" />
                     </button>
                     <button
                       onClick={() => onDownload(rep.id, rep.filename)}
                       className="p-1.5 text-blue-400 hover:bg-[#1e293b] rounded transition-colors cursor-pointer"
                       title="Download PDF"
                     >
-                      <Download className="h-3.5 w-3.5" />
+                      <DownloadSimple className="h-4 w-4" weight="bold" />
                     </button>
                     <button
                       onClick={() => onDelete(rep.id)}
                       className="p-1.5 text-red-400 hover:bg-[#1e293b] rounded transition-colors cursor-pointer"
                       title="Delete"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash className="h-4 w-4" weight="bold" />
                     </button>
                   </div>
                 </td>
@@ -346,7 +351,7 @@ const AnalysisHistoryTable: React.FC<HistoryTableProps> = ({
           </tbody>
         </table>
       </div>
-    </div>
+    </GlowCard>
   );
 };
 
@@ -563,90 +568,63 @@ export const DashboardPage: React.FC = () => {
 
   const kpiCards: KpiCardProps[] = [
     {
-      label: 'Total Reports',
+      label: 'Total Ingested Reports',
       value: dashboard.totalReports,
-      icon: Layers,
-      accent: '#3b82f6',
-      sub: 'Total analyses run',
-      // Steady upward trend
+      icon: Stack,
+      accent: '#38bdf8',
+      sub: 'Processed log files',
       sparkPoints: [[0,28],[16,26],[32,23],[48,21],[64,19],[80,17],[100,14]],
     },
     {
-      label: 'Critical Errors',
+      label: 'Critical Incidents',
       value: dashboard.criticalReports,
-      icon: AlertOctagon,
-      accent: '#ef4444',
-      sub: 'Immediate fix needed',
-      // Flat then sudden spike, then drop and slight recovery
+      icon: WarningOctagon,
+      accent: '#f43f5e',
+      sub: 'Actionable root causes',
       sparkPoints: [[0,26],[18,25],[36,26],[50,8],[62,22],[80,20],[100,19]],
     },
     {
-      label: 'High Severity',
+      label: 'High Severity Errors',
       value: dashboard.highReports,
-      icon: AlertTriangle,
-      accent: '#f97316',
-      sub: 'Needs attention soon',
-      // Moderate fluctuations, zigzag pattern
+      icon: Warning,
+      accent: '#fb923c',
+      sub: 'System warnings & timeouts',
       sparkPoints: [[0,22],[16,26],[32,19],[48,24],[64,17],[82,22],[100,18]],
     },
     {
-      label: 'Medium Severity',
-      value: dashboard.mediumReports,
-      icon: Info,
-      accent: '#f59e0b',
-      sub: 'Config-level issues',
-      // Mostly stable with minor ripple
-      sparkPoints: [[0,24],[16,23],[32,25],[48,22],[64,24],[82,23],[100,22]],
-    },
-    {
-      label: 'Errors Found',
-      value: dashboard.totalErrorsAnalyzed,
-      icon: AlertOctagon,
-      accent: '#a855f7',
-      sub: 'Total exceptions caught',
-      // Small gradual growth
-      sparkPoints: [[0,27],[16,26],[32,24],[48,23],[64,21],[82,19],[100,17]],
-    },
-    {
-      label: 'AI Confidence',
-      value: '94%',
+      label: 'RCA Diagnostic Rate',
+      value: '98.4%',
       icon: Cpu,
-      accent: '#00C8FF',
-      sub: 'Model accuracy',
-      // High stable line with very minimal variation
+      accent: '#06b6d4',
+      sub: 'Gemini 2.5 Flash Engine',
       sparkPoints: [[0,12],[16,11],[32,13],[48,11],[64,12],[82,10],[100,11]],
     },
   ];
 
-
   return (
-    <div className="space-y-4 max-w-[1440px] mx-auto min-w-0">
+    <div className="space-y-6 max-w-[1440px] mx-auto min-w-0">
 
       {/* ── Page Header ──────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#1e293b]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
         <div className="min-w-0">
-          <h2 className="text-base font-extrabold text-white tracking-tight">
-            AI Log Analysis Dashboard
-          </h2>
-          <p className="text-[10px] text-[#64748b] mt-0.5">
-            Upload · Analyze · Detect · Explain · Fix
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-bold text-white tracking-tight">
+              Log Observability & Diagnostics
+            </h2>
+          </div>
+          <p className="text-xs text-slate-400 mt-1">
+            Real-time ingestion telemetry, automated exception parsing, and AI root cause investigation.
           </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {/* AI engine status – filled glass badge, not a glowing pill */}
-          <span className="hidden sm:flex items-center gap-2 text-[11px] font-medium text-slate-300 bg-slate-800/50 border border-slate-700/40 px-3 py-1.5 rounded-lg">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
-            AI Engine Ready
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="flex items-center gap-2 text-xs font-semibold text-slate-300 bg-slate-800/60 border border-slate-700/60 px-3 py-1.5 rounded-xl">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            Telemetry Active
           </span>
         </div>
       </div>
 
       {/* ── Row 1: Upload Hero (60%) + Log Stream (40%) ──────────── */}
-      {/*
-        Use items-start so each cell is independently sized.
-        No forced min-h on the row — let content define height.
-        Both children use h-full so they fill the cell uniformly.
-      */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3 flex flex-col">
           <UploadHeroCard
@@ -654,16 +632,15 @@ export const DashboardPage: React.FC = () => {
             sampleLoading={sampleLoading}
           />
         </div>
-        <div className="lg:col-span-2 relative">
-          {/* Wrapper forces stream to fill the cell height without expanding it */}
-          <div className="absolute inset-0">
+        <div className="lg:col-span-2 relative min-h-[380px] lg:min-h-0">
+          <div className="lg:absolute inset-0">
             <KineticLogStream events={activityEvents} />
           </div>
         </div>
       </div>
 
       {/* ── Row 2: KPI Strip ────────────────────────────────────── */}
-      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-6 pt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpiCards.map((card) => (
           <KpiCard key={card.label} {...card} />
         ))}
@@ -703,7 +680,7 @@ export const DashboardPage: React.FC = () => {
       {!hasData && (
         <div className="bg-[#0d1117] border border-[#1e293b] rounded-xl p-10 text-center flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-[#1e293b] flex items-center justify-center">
-            <AlertOctagon className="h-6 w-6 text-[#64748b]" />
+            <WarningOctagon className="h-6 w-6 text-[#64748b]" weight="duotone" />
           </div>
           <div>
             <h4 className="text-sm font-bold text-white">No Analyses Yet</h4>
@@ -716,7 +693,7 @@ export const DashboardPage: React.FC = () => {
               onClick={() => navigate('/upload')}
               className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition-colors flex items-center gap-1.5"
             >
-              <Upload className="h-3.5 w-3.5 shrink-0" /> Upload Logs
+              <UploadSimple className="h-4 w-4 shrink-0" weight="bold" /> Upload Logs
             </button>
             <button
               onClick={handleAnalyzeSample}
