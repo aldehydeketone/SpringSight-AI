@@ -58,10 +58,13 @@ export const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout
-      title="Set New Password"
-      description="Enter your new password below to reset your account credentials."
-    >
+    <AuthLayout>
+      <div className="text-center mb-9">
+        <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Set New Password</h1>
+        <p className="text-sm sm:text-base text-white/60 font-normal tracking-wide">
+          Enter your new password below to reset your account credentials.
+        </p>
+      </div>
       {message && (
         <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm rounded-xl text-center">
           {message}
