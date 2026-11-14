@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,42 +18,62 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Rate limiting interceptor enforcing a limit of 20 requests per hour on AI endpoints.
- * Algorithm: Fixed 1-hour counter window using Redis INCR with a 1-hour TTL initialized on first request.
- * User identity: Extracted strictly from the authenticated Spring Security principal.
+ * Resilient design: Uses Redis if available, otherwise seamlessly falls back to an in-memory counter.
+ * A Redis connection glitch will NEVER break file analysis.
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class RateLimitInterceptor implements HandlerInterceptor {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectProvider<RedisTemplate<String, Object>> redisTemplateProvider;
     private final ObjectMapper objectMapper;
     private static final int MAX_REQUESTS_PER_HOUR = 20;
+
+    // In-memory fallback map (userId -> count)
+    private final Map<Long, AtomicInteger> inMemoryCounts = new ConcurrentHashMap<>();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)) {
-            // Unauthenticated requests should be handled by standard Spring Security filters.
             return true;
         }
 
         User user = (User) authentication.getPrincipal();
         Long userId = user.getId();
-        
-        String key = "rate_limit::ai::" + userId;
+        int requestCount = 0;
 
-        Long currentRequests = redisTemplate.opsForValue().increment(key, 1);
-
-        if (currentRequests != null && currentRequests == 1) {
-            redisTemplate.expire(key, Duration.ofHours(1));
+        boolean countedByRedis = false;
+        try {
+            RedisTemplate<String, Object> redisTemplate = redisTemplateProvider.getIfAvailable();
+            if (redisTemplate != null) {
+                String key = "rate_limit::ai::" + userId;
+                Long current = redisTemplate.opsForValue().increment(key, 1);
+                if (current != null) {
+                    if (current == 1) {
+                        redisTemplate.expire(key, Duration.ofHours(1));
+                    }
+                    requestCount = current.intValue();
+                    countedByRedis = true;
+                }
+            }
+        } catch (Exception ex) {
+            log.warn("[RateLimitInterceptor] Redis unavailable ({}). Gracefully falling back to in-memory rate limiting.", ex.getMessage());
         }
 
-        if (currentRequests != null && currentRequests > MAX_REQUESTS_PER_HOUR) {
+        if (!countedByRedis) {
+            // In-memory counting fallback
+            requestCount = inMemoryCounts.computeIfAbsent(userId, k -> new AtomicInteger(0)).incrementAndGet();
+        }
+
+        if (requestCount > MAX_REQUESTS_PER_HOUR) {
             log.warn("[RateLimitInterceptor] Rate limit exceeded for userId={}", userId);
             
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
@@ -64,7 +85,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             errorDetails.put("status", HttpStatus.TOO_MANY_REQUESTS.value());
             
             response.getWriter().write(objectMapper.writeValueAsString(errorDetails));
-            return false; // Stop processing
+            return false;
         }
 
         return true;
