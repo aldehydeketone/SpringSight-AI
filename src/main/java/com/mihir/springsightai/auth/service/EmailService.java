@@ -102,6 +102,7 @@ public class EmailService {
                         .uri(URI.create("https://api.resend.com/emails"))
                         .header("Authorization", "Bearer " + resendApiKey.trim())
                         .header("Content-Type", "application/json")
+                        .header("User-Agent", "SpringSightAI/1.0")
                         .timeout(Duration.ofSeconds(15))
                         .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                         .build();
